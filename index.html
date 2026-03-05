@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HOLON — Géoéconomie</title>
+<title>HOLON \u2014 G\u00e9o\u00e9conomie</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#080d12;--teal:#5cbfb0;--teal-dim:#3a8a7f;--teal-glow:rgba(92,191,176,0.12);--gold:#c9a96e;--txt:#e8e4dc;--txt2:#8fa0b0;--muted:#4a5a6a;--border:rgba(92,191,176,0.15);}
@@ -34,26 +34,17 @@ nav{display:flex;align-items:center;gap:18px;}
 #zoom-ctrl{position:fixed;bottom:24px;right:16px;display:flex;flex-direction:column;gap:6px;z-index:50;}
 .zb{width:32px;height:32px;background:rgba(8,13,18,.9);border:1px solid var(--border);color:var(--txt2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;}
 .zb:hover{border-color:var(--teal-dim);color:var(--teal);}
-#legend{position:fixed;bottom:24px;left:20px;display:flex;gap:16px;z-index:50;}
-.leg{display:flex;align-items:center;gap:6px;font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--txt2);}
-.leg-dot{width:8px;height:8px;border-radius:50%;}
-.hint{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.08em;pointer-events:none;transition:opacity .4s;white-space:nowrap;}
+.hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.08em;pointer-events:none;transition:opacity .4s;white-space:nowrap;}
 #tip{position:fixed;background:rgba(6,11,17,.96);border:1px solid var(--border);padding:6px 13px;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.04em;opacity:0;transition:opacity .12s;pointer-events:none;white-space:nowrap;z-index:200;}
 #panel{position:fixed;right:0;top:62px;bottom:0;width:0;overflow:hidden;transition:width .38s cubic-bezier(.4,0,.2,1);background:rgba(7,12,18,.97);border-left:1px solid var(--border);z-index:150;backdrop-filter:blur(24px);}
-#panel.open{width:min(400px,100vw);}
-.pi{width:min(400px,100vw);height:100%;display:flex;flex-direction:column;}
+#panel.open{width:min(380px,100vw);}
+.pi{width:min(380px,100vw);height:100%;display:flex;flex-direction:column;}
 .ph{padding:22px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .pr{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:3px;}
 .pn{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.1em;font-weight:400;margin-bottom:8px;}
 .pm{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
 .tag{font-size:9px;letter-spacing:.14em;padding:3px 9px;border:1px solid rgba(92,191,176,.28);color:var(--teal-dim);font-family:'Cormorant Garamond',serif;}
-.tag.gold{border-color:rgba(201,169,110,.4);color:#8a6a3a;}
-.tag.purple{border-color:rgba(160,124,197,.4);color:#a07cc5;}
 .pc{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--muted);font-style:italic;}
-.pthese{padding:14px 22px;border-bottom:1px solid var(--border);flex-shrink:0;max-height:160px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
-.pthese-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-dim);font-family:'Inter',sans-serif;margin-bottom:8px;}
-.pthese-txt{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--txt2);line-height:1.7;font-style:italic;}
-.pthese-txt strong{color:var(--txt);font-style:normal;}
 .pf{padding:9px 22px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0;}
 .fb{font-size:9px;letter-spacing:.12em;padding:4px 10px;background:transparent;border:1px solid var(--muted);color:var(--muted);cursor:pointer;font-family:'Cormorant Garamond',serif;transition:all .2s;}
 .fb:hover,.fb.on{border-color:var(--teal-dim);color:var(--teal);}
@@ -65,8 +56,8 @@ nav{display:flex;align-items:center;gap:18px;}
 .ai:hover{background:rgba(92,191,176,.04);}
 .ai:hover::before{background:var(--teal-dim);}
 .at{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;font-family:'Inter',sans-serif;}
-.at.thread{color:#5b9bd5;}.at.analyse{color:var(--teal);}.at.macro{color:var(--gold);}.at.note{color:#a07cc5;}.at.these{color:#c06060;}
-.ati{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.45;margin-bottom:6px;}
+.at.thread{color:#5b9bd5;}.at.analyse{color:var(--teal);}.at.macro{color:var(--gold);}.at.note{color:#a07cc5;}
+.ati{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.45;margin-bottom:6px;font-weight:400;}
 .ae{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:var(--txt2);line-height:1.6;margin-bottom:9px;}
 .af{display:flex;justify-content:space-between;align-items:center;}
 .ad{font-size:10px;color:var(--muted);letter-spacing:.06em;font-family:'Cormorant Garamond',serif;}
@@ -100,7 +91,7 @@ nav{display:flex;align-items:center;gap:18px;}
     <circle cx="46" cy="42" r="4.5" fill="#5cbfb0"/>
   </svg>
   <div class="ld-logo">HOLON</div>
-  <div class="ld-sub">— Géoéconomie Mondiale —</div>
+  <div class="ld-sub">\u2014 G\u00e9o\u00e9conomie Mondiale \u2014</div>
   <div class="ld-bar"><div class="ld-fill"></div></div>
 </div>
 
@@ -118,7 +109,7 @@ nav{display:flex;align-items:center;gap:18px;}
       <circle cx="52" cy="20" r="3" fill="#6a7a8a"/>
       <circle cx="46" cy="42" r="4" fill="#5cbfb0"/>
     </svg>
-    <div><div class="lt">HOLON</div><span class="ls">— Géoéconomie —</span></div>
+    <div><div class="lt">HOLON</div><span class="ls">\u2014 G\u00e9o\u00e9conomie \u2014</span></div>
   </div>
   <nav>
     <a class="nl">Analyses</a>
@@ -131,93 +122,93 @@ nav{display:flex;align-items:center;gap:18px;}
 
 <div id="zoom-ctrl">
   <button class="zb" id="zin">+</button>
-  <button class="zb" id="zout">−</button>
+  <button class="zb" id="zout">\u2212</button>
 </div>
 
-<div id="legend">
-  <div class="leg"><div class="leg-dot" style="background:#5cbfb0"></div>Pays</div>
-  <div class="leg"><div class="leg-dot" style="background:#c9a96e"></div>Ressources</div>
-  <div class="leg"><div class="leg-dot" style="background:#a07cc5"></div>Thème</div>
-</div>
-
-<div class="hint" id="hint">Pincez pour zoomer · cliquez sur un point</div>
+<div class="hint" id="hint">Pincez pour zoomer \u00b7 cliquez sur un pays</div>
 <div id="tip"></div>
 
 <div id="panel">
   <div class="pi">
     <div class="ph">
-      <div class="pr" id="pr">—</div>
-      <div class="pn" id="pn">—</div>
-      <div class="pm" id="ptags"></div>
-      <div class="pc" id="pcount"></div>
-    </div>
-    <div class="pthese" id="pthese" style="display:none">
-      <div class="pthese-label">Thèse stratégique</div>
-      <div class="pthese-txt" id="pthese-txt"></div>
+      <div class="pr" id="pr">R\u00e9gion</div>
+      <div class="pn" id="pn">\u2014</div>
+      <div class="pm"><div id="ptags"></div><div class="pc" id="pcount"></div></div>
     </div>
     <div class="pf">
       <button class="fb on" data-f="all">Tout</button>
-      <button class="fb" data-f="these">Thèse</button>
       <button class="fb" data-f="analyse">Analyse</button>
-      <button class="fb" data-f="macro">Macro</button>
       <button class="fb" data-f="thread">Thread</button>
+      <button class="fb" data-f="macro">Macro</button>
       <button class="fb" data-f="note">Note</button>
     </div>
     <div class="pl" id="pl"></div>
   </div>
-  <button class="bclose" id="pcl">✕</button>
+  <button class="bclose" id="pcl">\u2715</button>
 </div>
 
+<!-- Tout depuis unpkg \u2014 CDN le plus fiable sur mobile -->
 <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
 <script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+
 <script>
 window.onload = function() {
 
 const DATA = {
-  "Etats-Unis":{cat:"pays",region:"Amerique du Nord",tags:["Macro","Dollar","IA","Defense"],lat:38,lon:-97,
-    these:"Centre financier mondial inconteste. Leadership IA / cloud / semi / defense. Dollar toujours dominant a moyen terme. Politique plus transactionnelle sous Trump : tarifs comme arme geoeconomique, pression budgetaire croissante, polarisation structurelle. <strong>Positionnement :</strong> surponderation selective sur defense, IA infrastructure, energie disciplinee. Prudence sur pure growth sans moat profond.",
-    articles:[
-      {type:"these",title:"Forteresse America : le repli strategique americain et ses consequences",excerpt:"Trump accentue le decouplage : tarifs agressifs, unilateralisme, reduction des garanties de securite. Ce que le repli americain change pour les allies et les marches.",date:"1 mars 2025",url:"#"},
-      {type:"macro",title:"Dollar dominant, mais pour combien de temps ?",excerpt:"Dedollarisation lente, diversification progressive des reserves mondiales. Le billet vert reste incontournable a moyen terme, mais son emprise s'erode.",date:"20 fev. 2025",url:"#"},
-      {type:"analyse",title:"IA et defense : le complexe militaro-industriel 2.0",excerpt:"Les Etats-Unis dominent la chaine de valeur IA et defense. Une surponderation selective s'impose sur ces segments a moat profond.",date:"14 fev. 2025",url:"#"},
-      {type:"note",title:"Deficits jumeaux : la vulnerabilite structurelle de l'hyperpuissance",excerpt:"Deficit budgetaire et commercial persistants, dependance aux capitaux etrangers. Le talon d'Achille du systeme americain.",date:"3 fev. 2025",url:"#"}
-    ]},
-  "Chine":{cat:"pays",region:"Asie-Pacifique",tags:["Industrie","Decouplage","Taiwan"],lat:35,lon:103,
-    these:"Puissance industrielle dominante avec excedents massifs. Ambition d'autosuffisance technologique. Fragilites : immobilier, demographie, surcapacites si le monde se referme. <strong>Risque Taiwan :</strong> blocus plus probable qu'invasion totale. <strong>Positionnement :</strong> exposition prudente et indirecte.",
-    articles:[
-      {type:"these",title:"Decouplage technologique : Pekin joue l'autosuffisance",excerpt:"Xi accelere le pivot vers l'independance technologique. Semi-conducteurs, IA, energie : la Chine construit ses propres remparts.",date:"22 fev. 2025",url:"#"},
-      {type:"analyse",title:"Taiwan : blocus plutot qu'invasion, le calcul cout/benefice",excerpt:"Une invasion totale detruirait les semi-conducteurs que Pekin convoite. Le scenario d'un blocus progressif est bien plus probable.",date:"15 fev. 2025",url:"#"},
-      {type:"macro",title:"Surcapacites chinoises : la bombe a retardement du commerce mondial",excerpt:"Acier, vehicules electriques, panneaux solaires : la Chine inonde les marches. Les tensions commerciales ne font que commencer.",date:"8 fev. 2025",url:"#"},
-      {type:"note",title:"Immobilier et deflation : le spectre japonais plane sur Pekin",excerpt:"Les paralleles entre la Chine aujourd'hui et le Japon des annees 90 se multiplient.",date:"20 jan. 2025",url:"#"}
-    ]},
-  "Inde":{cat:"pays",region:"Asie du Sud",tags:["Croissance","Friend-shoring","Demographie"],lat:20,lon:78,
-    these:"Grand gagnant potentiel du decouplage sino-americain. Demographie favorable, reformes progressives. <strong>Fragilites :</strong> infrastructures insuffisantes, dependance energetique. <strong>Positionnement :</strong> surponderation progressive long terme.",
-    articles:[
-      {type:"these",title:"L'Inde, grand gagnant du friend-shoring",excerpt:"Le decouplage US-Chine cree un appel d'air pour l'Inde. Demographie, couts competitifs, stabilite relative : les conditions d'une ascension structurelle.",date:"24 fev. 2025",url:"#"},
-      {type:"analyse",title:"Infrastructures : le talon d'Achille de la croissance indienne",excerpt:"Routes, ports, energie : l'Inde court apres ses besoins. Le defi infrastructurel conditionne la capacite d'absorption des investissements etrangers.",date:"10 fev. 2025",url:"#"},
-      {type:"macro",title:"Roupie et souverainete monetaire : la strategie de Modi",excerpt:"L'Inde developpe ses propres infrastructures de paiement pour reduire sa dependance au dollar.",date:"28 jan. 2025",url:"#"}
-    ]},
-  "Europe":{cat:"pays",region:"Europe",tags:["Defense","Value","Reindustrialisation"],lat:50,lon:10,
-    these:"Bloc riche mais politiquement fragmente. Retard relatif en tech strategique. <strong>Opportunites :</strong> valorisation attractive, acceleration defense, reindustrialisation partielle. <strong>Positionnement :</strong> value/cycliques, defense europeenne, industrie/automation.",
-    articles:[
-      {type:"these",title:"Rearmement europeen : opportunite d'investissement ou necessite geopolitique ?",excerpt:"La menace russe et le desengagement americain forcent l'Europe a se rearmer. Un cycle long sur la defense et l'industrie.",date:"1 mars 2025",url:"#"},
-      {type:"analyse",title:"Le modele allemand en crise : la fin du Wirtschaftswunder ?",excerpt:"Desindustrialisation, crise energetique, vieillissement demographique. L'Allemagne a la croisee des chemins.",date:"20 fev. 2025",url:"#"},
-      {type:"macro",title:"L'Europe face au choc tarifaire americain",excerpt:"Trump impose des tarifs sur l'UE. La dependance export de l'industrie europeenne reste structurelle.",date:"15 fev. 2025",url:"#"},
-      {type:"note",title:"France : souverainete affichee, dependance reelle",excerpt:"Paris joue la carte de l'autonomie strategique, mais le deficit a 6% du PIB fragilise la posture.",date:"2 mars 2025",url:"#"}
-    ]},
-  "Russie":{cat:"pays",region:"Eurasie",tags:["Sanctions","Energie","Guerre"],lat:61,lon:90,
-    these:"Economie de guerre sous perfusion militaire. Croissance artificielle tiree par les depenses d'armement. Reorientation vers la Chine, l'Inde et la Turquie pour les flux energetiques. <strong>Positionnement :</strong> non investissable directement.",
-    articles:[
-      {type:"these",title:"L'economie de guerre russe : resilience ou illusion ?",excerpt:"La croissance russe est dopee aux depenses militaires. Une fois le conflit termine, le retour de baton economique sera brutal.",date:"25 fev. 2025",url:"#"},
-      {type:"analyse",title:"Petrole russe : les routes de contournement des sanctions",excerpt:"Inde, Chine, Turquie : comment le brut russe continue de circuler malgre les restrictions occidentales.",date:"12 fev. 2025",url:"#"},
-      {type:"macro",title:"Russie-Chine : une alliance de necessite aux limites structurelles",excerpt:"Moscou est devenu dependant de Pekin. Un partenariat qui arrange les deux parties, mais avec des asymetries croissantes.",date:"1 fev. 2025",url:"#"}
-    ]},
-  "Arabie Saoudite":{cat:"pays",region:"Moyen-Orient",tags:["Petrole","Vision 2030","Pivot"],lat:24,lon:45,
-    these:"Puissance moyenne par excellence : joue sur plusieurs tableaux (US, Chine, Russie via OPEP+). Vision 2030 : pari sur la diversification avant l'epuisement de la rente petroliere. Incarne la nouvelle agilite des puissances moyennes dans un monde multipolaire.",
-    articles:[
-      {type:"these",title:"L'Arabie Saoudite, archetype de la puissance moyenne agile",excerpt:"Riyad refuse de choisir entre Washington et Pekin. Dans un monde fragmente, les pivots pragmatiques capturent une prime strategique.",date:"19 fev. 2025",url:"#"},
-      {type:"analyse",title:"Vision 2030 : l'Arabie Saoudite peut-elle vraiment se diversifier ?",excerpt:"MBS parie sur le tourisme, la tech et le divertissement. Les defis structurels restent immenses.",date:"10 fev. 2025",url:"#"},
-      {type:"macro",title:"L'OPEP+ comme levier geopolitique : la fin du petrole docile",excerpt:"L'Arabie Saoudite utilise les coupes de production comme outil de pression. L'ere du petrole aligne sur Washington est revolue.",date:"1 fev. 2025",url:"#"}
-    ]},
-  "Bresil":{cat:"pays",region:"Amerique du Sud",tags:["BRICS","Emergents","Commodites"],lat:-10,lon:-53,
-    these:"Pivot potentiel du Sud global. Ressources agricoles et minieres strategiques. Lula joue la carte BRICS et la dedollarisation symbolique, mais les contraintes budgetaires limitent les ambitions. <strong>Positionnement :</strong
+  "United States of America":{region:"Am\u00e9rique du Nord",tags:["Macro","Dollar"],lat:38,lon:-97,articles:[{type:"macro",title:"La fin du dollar roi ? D\u00e9dollarisation et recomposition du syst\u00e8me mon\u00e9taire",excerpt:"Les BRICS acc\u00e9l\u00e8rent leur strat\u00e9gie de contournement du dollar.",date:"28 f\u00e9v. 2025",url:"#"},{type:"analyse",title:"Fed vs inflation : le dilemme impossible de Powell",excerpt:"Entre stabilit\u00e9 des prix et risque de r\u00e9cession, la Fed navigue en territoire inconnu.",date:"14 f\u00e9v. 2025",url:"#"},{type:"thread",title:"Thread : Les 10 graphiques qui expliquent l'\u00e9conomie am\u00e9ricaine en 2025",excerpt:"Les donn\u00e9es cl\u00e9s pour comprendre la trajectoire macro US.",date:"3 f\u00e9v. 2025",url:"#"}]},
+  "China":{region:"Asie-Pacifique",tags:["G\u00e9opolitique","Industrie"],lat:35,lon:103,articles:[{type:"analyse",title:"La strat\u00e9gie \u00e9conomique de Xi : entre relance domestique et expansion ext\u00e9rieure",excerpt:"Comment P\u00e9kin articule sa politique industrielle avec ses ambitions g\u00e9opolitiques.",date:"22 f\u00e9v. 2025",url:"#"},{type:"thread",title:"Thread : Belt & Road Initiative \u2014 bilan d'une d\u00e9cennie",excerpt:"Qui a vraiment profit\u00e9 des nouvelles routes de la soie ?",date:"10 jan. 2025",url:"#"},{type:"macro",title:"D\u00e9flation chinoise : le Japon des ann\u00e9es 90 comme miroir",excerpt:"Les parall\u00e8les troublants entre la stagnation japonaise et la Chine.",date:"5 jan. 2025",url:"#"},{type:"note",title:"Yuan digital et surveillance financi\u00e8re",excerpt:"Les implications g\u00e9opolitiques du e-CNY.",date:"18 d\u00e9c. 2024",url:"#"}]},
+  "Russia":{region:"Eurasie",tags:["Sanctions","\u00c9nergie"],lat:61,lon:90,articles:[{type:"analyse",title:"L'\u00e9conomie de guerre russe : r\u00e9silience ou illusion ?",excerpt:"Malgr\u00e9 les sanctions, la Russie affiche une croissance.",date:"25 f\u00e9v. 2025",url:"#"},{type:"macro",title:"P\u00e9trole russe : les routes de contournement des sanctions",excerpt:"Inde, Chine, Turquie \u2014 comment le brut russe continue de circuler.",date:"12 f\u00e9v. 2025",url:"#"}]},
+  "Saudi Arabia":{region:"Moyen-Orient",tags:["P\u00e9trole","Vision 2030"],lat:24,lon:45,articles:[{type:"analyse",title:"Vision 2030 : l'Arabie Saoudite peut-elle vraiment se diversifier ?",excerpt:"MBS parie sur une transformation \u00e9conomique radicale.",date:"19 f\u00e9v. 2025",url:"#"},{type:"thread",title:"Thread : L'OPEP+ est-il encore pertinent en 2025 ?",excerpt:"La coh\u00e9sion du cartel mise \u00e0 l'\u00e9preuve.",date:"8 jan. 2025",url:"#"}]},
+  "Germany":{region:"Europe",tags:["Industrie","\u00c9nergie"],lat:51,lon:10,articles:[{type:"analyse",title:"Le mod\u00e8le allemand en crise : la fin du Wirtschaftswunder ?",excerpt:"D\u00e9sindustrialisation, crise \u00e9nerg\u00e9tique et vieillissement d\u00e9mographique.",date:"20 f\u00e9v. 2025",url:"#"},{type:"macro",title:"L'Europe face au choc tarifaire am\u00e9ricain",excerpt:"Comment l'UE adapte sa strat\u00e9gie commerciale.",date:"1 mars 2025",url:"#"}]},
+  "France":{region:"Europe",tags:["D\u00e9ficit","Souverainet\u00e9"],lat:46,lon:2,articles:[{type:"analyse",title:"La France en d\u00e9crochage budg\u00e9taire : anatomie d'une crise annonc\u00e9e",excerpt:"Avec un d\u00e9ficit \u00e0 6% du PIB, Paris dans le collimateur des march\u00e9s.",date:"2 mars 2025",url:"#"}]},
+  "Brazil":{region:"Am\u00e9rique du Sud",tags:["BRICS","\u00c9mergents"],lat:-10,lon:-53,articles:[{type:"analyse",title:"Lula III : ambitions sociales vs contraintes budg\u00e9taires",excerpt:"Le retour de Lula confront\u00e9 \u00e0 une dette publique croissante.",date:"15 f\u00e9v. 2025",url:"#"},{type:"thread",title:"Thread : Le Br\u00e9sil, pivot des BRICS en Am\u00e9rique Latine",excerpt:"Comment Bras\u00edlia joue sur plusieurs tableaux.",date:"20 jan. 2025",url:"#"}]},
+  "India":{region:"Asie du Sud",tags:["Croissance","G\u00e9opolitique"],lat:20,lon:78,articles:[{type:"analyse",title:"L'Inde, nouveau centre de gravit\u00e9 \u00e9conomique mondial ?",excerpt:"1,4 milliard d'habitants et une croissance \u00e0 7%.",date:"24 f\u00e9v. 2025",url:"#"},{type:"macro",title:"Roupie et souverainet\u00e9 mon\u00e9taire : la strat\u00e9gie de Modi",excerpt:"L'Inde d\u00e9veloppe ses propres infrastructures de paiement.",date:"11 jan. 2025",url:"#"}]},
+  "Turkey":{region:"Eurasie",tags:["Pivot","Inflation"],lat:38,lon:35,articles:[{type:"note",title:"La Turquie, pivot entre Orient et Occident \u2014 \u00e0 quel prix ?",excerpt:"Erdogan navigue entre l'OTAN et les BRICS.",date:"6 f\u00e9v. 2025",url:"#"}]},
+  "Japan":{region:"Asie-Pacifique",tags:["Yen","Politique mon\u00e9taire"],lat:36,lon:138,articles:[{type:"macro",title:"La BOJ sort de sa d\u00e9cennie de taux n\u00e9gatifs",excerpt:"Le pivot de la Banque du Japon envoie des ondes de choc.",date:"17 f\u00e9v. 2025",url:"#"},{type:"analyse",title:"Le carry trade yen : la bombe \u00e0 retardement des march\u00e9s",excerpt:"Des milliers de milliards emprunt\u00e9s en yen.",date:"28 jan. 2025",url:"#"}]},
+  "South Africa":{region:"Afrique",tags:["BRICS","\u00c9mergents"],lat:-29,lon:25,articles:[{type:"analyse",title:"L'Afrique du Sud et les BRICS \u00e9largi : entre espoirs et d\u00e9sillusions",excerpt:"Les enjeux pour le continent africain.",date:"9 f\u00e9v. 2025",url:"#"}]},
+  "Iran":{region:"Moyen-Orient",tags:["Sanctions","Nucl\u00e9aire"],lat:32,lon:53,articles:[{type:"analyse",title:"L'Iran dans l'axe Moscou-P\u00e9kin : une alliance de n\u00e9cessit\u00e9",excerpt:"Comment T\u00e9h\u00e9ran s'int\u00e8gre dans le nouvel ordre alternatif.",date:"7 f\u00e9v. 2025",url:"#"}]},
+  "Nigeria":{region:"Afrique",tags:["P\u00e9trole","D\u00e9mographie"],lat:9,lon:8,articles:[{type:"thread",title:"Thread : Le Nigeria en 2025 \u2014 la puissance africaine \u00e0 la crois\u00e9e des chemins",excerpt:"D\u00e9mographie explosive, ressources p\u00e9troli\u00e8res, instabilit\u00e9 politique.",date:"13 jan. 2025",url:"#"}]}
+};
+
+const N2N={4:"Afghanistan",8:"Albania",12:"Algeria",24:"Angola",32:"Argentina",36:"Australia",40:"Austria",50:"Bangladesh",56:"Belgium",64:"Bhutan",68:"Bolivia",76:"Brazil",100:"Bulgaria",104:"Myanmar",116:"Cambodia",120:"Cameroon",124:"Canada",152:"Chile",156:"China",170:"Colombia",178:"Republic of Congo",180:"Dem. Rep. Congo",188:"Costa Rica",192:"Cuba",203:"Czech Republic",208:"Denmark",214:"Dominican Republic",218:"Ecuador",818:"Egypt",222:"El Salvador",231:"Ethiopia",246:"Finland",250:"France",266:"Gabon",276:"Germany",288:"Ghana",300:"Greece",320:"Guatemala",332:"Haiti",340:"Honduras",356:"India",360:"Indonesia",364:"Iran",368:"Iraq",372:"Ireland",376:"Israel",380:"Italy",392:"Japan",400:"Jordan",398:"Kazakhstan",404:"Kenya",410:"South Korea",408:"North Korea",414:"Kuwait",418:"Laos",422:"Lebanon",434:"Libya",484:"Mexico",504:"Morocco",508:"Mozambique",516:"Namibia",528:"Netherlands",554:"New Zealand",566:"Nigeria",578:"Norway",586:"Pakistan",604:"Peru",608:"Philippines",616:"Poland",620:"Portugal",642:"Romania",643:"Russia",682:"Saudi Arabia",686:"Senegal",710:"South Africa",724:"Spain",729:"Sudan",728:"South Sudan",752:"Sweden",756:"Switzerland",760:"Syria",764:"Thailand",792:"Turkey",800:"Uganda",804:"Ukraine",784:"United Arab Emirates",826:"United Kingdom",840:"United States of America",858:"Uruguay",860:"Uzbekistan",862:"Venezuela",704:"Vietnam",887:"Yemen",894:"Zambia",716:"Zimbabwe"};
+
+const mapWrap = document.getElementById('map-wrap');
+const svg = d3.select('#map-svg');
+const tip = document.getElementById('tip');
+let W = mapWrap.clientWidth, H = mapWrap.clientHeight;
+svg.attr('width', W).attr('height', H);
+
+const projection = d3.geoNaturalEarth1().scale(W/6.5).translate([W/2, H/2]);
+const pathGen = d3.geoPath().projection(projection);
+const graticule = d3.geoGraticule().step([20,20]);
+
+const mapG = svg.append('g');
+mapG.append('path').datum({type:'Sphere'}).attr('class','sphere').attr('d',pathGen);
+mapG.append('path').datum(graticule()).attr('class','graticule').attr('d',pathGen);
+const countryG = mapG.append('g');
+const dotsG = mapG.append('g');
+
+const zoom = d3.zoom().scaleExtent([1,10]).on('zoom', function(e){
+  mapG.attr('transform', e.transform);
+  const k = e.transform.k;
+  dotsG.selectAll('circle.di').attr('r', 3.5/Math.sqrt(k));
+  dotsG.selectAll('circle.do').attr('r', 7/Math.sqrt(k)).style('stroke-width', 1/k);
+  countryG.selectAll('.country').style('stroke-width', 0.3/k);
+});
+svg.call(zoom);
+document.getElementById('zin').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.5);
+document.getElementById('zout').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 0.67);
+
+// Un seul fetch, vers unpkg directement
+fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
+  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(world => {
+    const countries = topojson.feature(world, world.objects.countries);
+    const borders = topojson.mesh(world, world.objects.countries, (a,b) => a!==b);
+
+    countryG.selectAll('path').data(countries.features).join('path')
+      .attr('class', d => 'country'+(N2N[+d.id]&&DATA[N2N[+d.id]]?' has-data':''))
+      .attr('d', pathGen)
+      .on('mousemove', function(e,d){ const n=N2N[+d.id]; if(n) showTip(e.clientX,e.clientY,n); })
+      .on('mouseleave', hideTip)
+      .on('click', function(e,d){ const n=N2N[+d.id]; if(n){selec
