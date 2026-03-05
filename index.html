@@ -124,6 +124,22 @@ nav{display:flex;align-items:center;gap:22px;}
 
 <script src="./d3.min.js"></script>
 <script src="./topojson.min.js"></script>
+<div id="dbg" style="position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.9);color:#f88;font-size:11px;padding:10px;z-index:9999;max-height:45vh;overflow-y:auto;font-family:monospace;white-space:pre-wrap;border-top:1px solid #f44;"></div>
+<script>
+var dbg=document.getElementById('dbg');
+function log(m){dbg.textContent+=m+'\n';dbg.scrollTop=dbg.scrollHeight;}
+window.onerror=function(m,s,l){log('ERR: '+m+' (ligne '+l+')');return false;};
+var _ce=console.error.bind(console);
+console.error=function(){log('ERROR: '+Array.from(arguments).join(' '));_ce.apply(console,arguments);};
+setTimeout(function(){
+  log('d3 = '+(typeof d3));
+  log('topojson = '+(typeof topojson));
+  if(typeof d3==='undefined')log('>>> d3.min.js introuvable !');
+  if(typeof topojson==='undefined')log('>>> topojson.min.js introuvable !');
+  log('Test fetch countries-110m.json...');
+  fetch('./countries-110m.json').then(function(r){log('JSON status: '+r.status);}).catch(function(e){log('JSON fetch ERR: '+e);});
+},1500);
+</script>
 
 <script>
 const DATA={"United States of America":{region:"Amérique du Nord",tags:["Macro","Dollar"],lat:38,lon:-97,articles:[{type:"macro",title:"La fin du dollar roi ? Dédollarisation et recomposition du système monétaire",excerpt:"Les BRICS accélèrent leur stratégie de contournement du dollar. Analyse des mécanismes structurels.",date:"28 fév. 2025",url:"#"},{type:"analyse",title:"Fed vs inflation : le dilemme impossible de Powell",excerpt:"Entre stabilité des prix et risque de récession, la Fed navigue en territoire inconnu.",date:"14 fév. 2025",url:"#"},{type:"thread",title:"Thread : Les 10 graphiques qui expliquent l'économie américaine en 2025",excerpt:"Un fil de 15 tweets avec les données clés pour comprendre la trajectoire macro US.",date:"3 fév. 2025",url:"#"}]},"China":{region:"Asie-Pacifique",tags:["Géopolitique","Industrie"],lat:35,lon:103,articles:[{type:"analyse",title:"La stratégie économique de Xi : entre relance domestique et expansion extérieure",excerpt:"Comment Pékin articule sa politique industrielle avec ses ambitions géopolitiques globales.",date:"22 fév. 2025",url:"#"},{type:"thread",title:"Thread : Belt & Road Initiative — bilan d'une décennie",excerpt:"Qui a vraiment profité des nouvelles routes de la soie ? Les données surprenantes.",date:"10 jan. 2025",url:"#"},{type:"macro",title:"Déflation chinoise : le Japon des années 90 comme miroir",excerpt:"Les parallèles troublants entre la stagnation japonaise et la Chine.",date:"5 jan. 2025",url:"#"},{type:"note",title:"Yuan digital et surveillance financière",excerpt:"Les implications géopolitiques du e-CNY au-delà de la rhétorique technologique.",date:"18 déc. 2024",url:"#"}]},"Russia":{region:"Eurasie",tags:["Sanctions","Énergie"],lat:61,lon:90,articles:[{type:"analyse",title:"L'économie de guerre russe : résilience ou illusion ?",excerpt:"Malgré les sanctions, la Russie affiche une croissance. Décryptage d'une économie sous perfusion militaire.",date:"25 fév. 2025",url:"#"},{type:"macro",title:"Pétrole russe : les routes de contournement des sanctions",excerpt:"Inde, Chine, Turquie — comment le brut russe continue de circuler malgré les restrictions.",date:"12 fév. 2025",url:"#"}]},"Saudi Arabia":{region:"Moyen-Orient",tags:["Pétrole","Vision 2030"],lat:24,lon:45,articles:[{type:"analyse",title:"Vision 2030 : l'Arabie Saoudite peut-elle vraiment se diversifier ?",excerpt:"MBS parie sur une transformation économique radicale. Les défis structurels restent immenses.",date:"19 fév. 2025",url:"#"},{type:"thread",title:"Thread : L'OPEP+ est-il encore pertinent en 2025 ?",excerpt:"La cohésion du cartel mise à l'épreuve par les intérêts divergents de ses membres.",date:"8 jan. 2025",url:"#"}]},"Germany":{region:"Europe",tags:["Industrie","Énergie"],lat:51,lon:10,articles:[{type:"analyse",title:"Le modèle allemand en crise : la fin du Wirtschaftswunder ?",excerpt:"Désindustrialisation, crise énergétique et vieillissement démographique — l'Allemagne à la croisée des chemins.",date:"20 fév. 2025",url:"#"},{type:"macro",title:"L'Europe face au choc tarifaire américain",excerpt:"Comment l'UE adapte sa stratégie commerciale face au retour du protectionnisme US.",date:"1 mars 2025",url:"#"}]},"France":{region:"Europe",tags:["Déficit","Souveraineté"],lat:46,lon:2,articles:[{type:"analyse",title:"La France en décrochage budgétaire : anatomie d'une crise annoncée",excerpt:"Avec un déficit à 6% du PIB, Paris se retrouve dans le collimateur des marchés et de la Commission.",date:"2 mars 2025",url:"#"}]},"Brazil":{region:"Amérique du Sud",tags:["BRICS","Émergents"],lat:-10,lon:-53,articles:[{type:"analyse",title:"Lula III : ambitions sociales vs contraintes budgétaires",excerpt:"Le retour de Lula confronté aux réalités d'une dette publique croissante.",date:"15 fév. 2025",url:"#"},{type:"thread",title:"Thread : Le Brésil, pivot des BRICS en Amérique Latine",excerpt:"Comment Brasília joue sur plusieurs tableaux dans la rivalité sino-américaine.",date:"20 jan. 2025",url:"#"}]},"India":{region:"Asie du Sud",tags:["Croissance","Géopolitique"],lat:20,lon:78,articles:[{type:"analyse",title:"L'Inde, nouveau centre de gravité économique mondial ?",excerpt:"Avec 1,4 milliard d'habitants et une croissance à 7%, l'Inde redessine les équilibres géoéconomiques.",date:"24 fév. 2025",url:"#"},{type:"macro",title:"Roupie et souveraineté monétaire : la stratégie de Modi",excerpt:"L'Inde développe ses propres infrastructures de paiement pour réduire sa dépendance au dollar.",date:"11 jan. 2025",url:"#"}]},"Turkey":{region:"Eurasie",tags:["Pivot","Inflation"],lat:38,lon:35,articles:[{type:"note",title:"La Turquie, pivot entre Orient et Occident — à quel prix ?",excerpt:"Erdogan navigue entre l'OTAN et les BRICS avec une économie sous tension extrême.",date:"6 fév. 2025",url:"#"}]},"Japan":{region:"Asie-Pacifique",tags:["Yen","Politique monétaire"],lat:36,lon:138,articles:[{type:"macro",title:"La BOJ sort de sa décennie de taux négatifs",excerpt:"Le pivot de la Banque du Japon envoie des ondes de choc sur les marchés obligataires mondiaux.",date:"17 fév. 2025",url:"#"},{type:"analyse",title:"Le carry trade yen : la bombe à retardement des marchés",excerpt:"Des milliers de milliards empruntés en yen. Que se passe-t-il si ça se déboucle ?",date:"28 jan. 2025",url:"#"}]},"South Africa":{region:"Afrique",tags:["BRICS","Émergents"],lat:-29,lon:25,articles:[{type:"analyse",title:"L'Afrique du Sud et les BRICS élargi : entre espoirs et désillusions",excerpt:"Johannesburg accueille la nouvelle géographie des BRICS. Les enjeux pour le continent africain.",date:"9 fév. 2025",url:"#"}]},"Iran":{region:"Moyen-Orient",tags:["Sanctions","Nucléaire"],lat:32,lon:53,articles:[{type:"analyse",title:"L'Iran dans l'axe Moscou-Pékin : une alliance de nécessité",excerpt:"Comment Téhéran s'intègre dans le nouvel ordre alternatif face à l'hégémonie américaine.",date:"7 fév. 2025",url:"#"}]},"Nigeria":{region:"Afrique",tags:["Pétrole","Démographie"],lat:9,lon:8,articles:[{type:"thread",title:"Thread : Le Nigeria en 2025 — la puissance africaine à la croisée des chemins",excerpt:"Démographie explosive, ressources pétrolières, instabilité politique : le paradoxe nigérian.",date:"13 jan. 2025",url:"#"}]},"Arctic":{region:"Arctique",tags:["Géopolitique","Ressources"],lat:85,lon:0,articles:[{type:"analyse",title:"La course à l'Arctique : le nouveau Grand Jeu des puissances",excerpt:"Fonte des glaces, routes maritimes et ressources sous-marines — l'Arctique devient le théâtre d'une rivalité stratégique inédite.",date:"1 mars 2025",url:"#"},{type:"thread",title:"Thread : Pourquoi l'Arctique sera l'enjeu géopolitique de la décennie",excerpt:"De la Route du Nord-Est aux revendications territoriales : ce que la fonte des glaces change pour les équilibres de puissance.",date:"15 jan. 2025",url:"#"}]}};
@@ -173,31 +189,4 @@ const graticule = d3.geoGraticule().step([20,20]);
 
 globeG.append('path').datum({type:'Sphere'}).attr('class','ocean-sphere').attr('d',pathGen);
 svg.append('circle').attr('cx',W/2).attr('cy',H/2).attr('r',R*1.04).attr('fill','url(#atmGrad)');
-const gratPath = globeG.append('path').datum(graticule()).attr('class','graticule').attr('d',pathGen);
-const countryG = globeG.append('g');
-
-const arcticPoly=[];
-for(let lon=-180;lon<=180;lon+=4) arcticPoly.push([lon,68]);
-const arcticFeat={type:'Feature',geometry:{type:'Polygon',coordinates:[arcticPoly.concat([[180,90],[0,90],[-180,90],[-180,68]])]}};
-const arcticPath = globeG.append('path').datum(arcticFeat).attr('class','arctic-ice').attr('d',pathGen);
-
-svg.append('circle').attr('cx',W/2).attr('cy',H/2).attr('r',R)
-  .attr('fill','none').attr('stroke','rgba(92,191,176,0.18)').attr('stroke-width','1');
-
-const dotsG = svg.append('g');
-let allPaths = null;
-let selectedName = null;
-
-// ═══════════════════════════════════════
-// CHARGEMENT LOCAL — countries-110m.json
-// doit être dans le même dossier que index.html
-// ═══════════════════════════════════════
-fetch('./countries-110m.json')
-  .then(r => {
-    if(!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(world => {
-    const features = topojson.feature(world, world.objects.countries).features;
-
-    allPaths = countryG
+const gratPath = globeG.append('path').datum(graticule()).attr('class','graticule').attr('d',path
