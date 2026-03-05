@@ -10,71 +10,88 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'Inter',sans-serif;font-weight:300;color:var(--txt);}
-header{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;background:linear-gradient(180deg,rgba(8,13,18,.98),rgba(8,13,18,.7));backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;}
-.lw{display:flex;align-items:center;gap:13px;}
-.lt{font-family:'Cinzel',serif;font-size:19px;font-weight:600;letter-spacing:.28em;}
-.ls{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.2em;color:var(--teal);font-style:italic;display:block;margin-top:2px;}
-nav{display:flex;align-items:center;gap:22px;}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;background:linear-gradient(180deg,rgba(8,13,18,.98),rgba(8,13,18,.7));backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;}
+.lw{display:flex;align-items:center;gap:12px;}
+.lt{font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.28em;}
+.ls{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.2em;color:var(--teal);font-style:italic;display:block;margin-top:1px;}
+nav{display:flex;align-items:center;gap:18px;}
 .nl{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.1em;color:var(--txt2);cursor:pointer;transition:color .2s;text-decoration:none;}
 .nl:hover{color:var(--teal);}
-.nc{border:1px solid var(--teal-dim);color:var(--teal);padding:6px 16px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.15em;transition:all .25s;cursor:pointer;background:none;}
+.nc{border:1px solid var(--teal-dim);color:var(--teal);padding:5px 14px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.15em;transition:all .25s;cursor:pointer;background:none;}
 .nc:hover{background:var(--teal-glow);}
-#globe-wrap{position:fixed;inset:0;top:62px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-#globe-svg{overflow:visible;cursor:grab;}
-#globe-svg:active{cursor:grabbing;}
-.glow-bg{position:absolute;width:640px;height:640px;background:radial-gradient(circle,rgba(92,191,176,.065) 0%,transparent 68%);pointer-events:none;border-radius:50%;}
-.graticule{fill:none;stroke:rgba(255,255,255,0.04);stroke-width:.5;}
-.country-path{fill:#162434;stroke:#1e3248;stroke-width:.4;cursor:pointer;transition:fill .15s,stroke .15s;}
-.country-path:hover{fill:#1f3a52;stroke:rgba(92,191,176,.3);}
-.country-path.has-data{fill:#183040;stroke:rgba(92,191,176,.22);}
-.country-path.has-data:hover{fill:#214d65;stroke:rgba(92,191,176,.5);}
-.country-path.active{fill:#14352f!important;stroke:#5cbfb0!important;stroke-width:.9;}
-.arctic-ice{fill:rgba(200,230,240,0.18);stroke:rgba(180,220,235,0.2);stroke-width:.5;}
-.ocean-sphere{fill:url(#oceanGrad);}
-.data-dot{cursor:pointer;}
-.data-dot circle.outer{fill:none;stroke:rgba(92,191,176,.35);stroke-width:1;}
-.data-dot circle.inner{fill:#5cbfb0;}
-.data-dot:hover circle.inner{fill:#7dd8cc;}
-#tip{position:fixed;background:rgba(6,11,17,.96);border:1px solid var(--border);padding:7px 14px;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.04em;opacity:0;transition:opacity .12s;pointer-events:none;white-space:nowrap;z-index:200;}
+
+#map-wrap{position:fixed;inset:0;top:62px;overflow:hidden;background:var(--bg);}
+#map-svg{width:100%;height:100%;cursor:grab;display:block;}
+#map-svg:active{cursor:grabbing;}
+
+/* Pays */
+.country{fill:#162434;stroke:#1a2e42;stroke-width:.3;cursor:pointer;transition:fill .15s,stroke .15s;}
+.country:hover{fill:#1f3a52;stroke:rgba(92,191,176,.4);}
+.country.has-data{fill:#183040;stroke:rgba(92,191,176,.25);}
+.country.has-data:hover{fill:#1e4a62;stroke:rgba(92,191,176,.6);}
+.country.active{fill:#14352f!important;stroke:#5cbfb0!important;stroke-width:.8;}
+.graticule{fill:none;stroke:rgba(255,255,255,.03);stroke-width:.4;}
+.sphere{fill:url(#seaGrad);}
+.border{fill:none;stroke:rgba(92,191,176,.08);stroke-width:.3;}
+
+/* Dots */
+.dot-g{cursor:pointer;}
+.dot-outer{fill:none;stroke:rgba(92,191,176,.4);stroke-width:1;animation:pulse 2.4s ease-in-out infinite;}
+.dot-inner{fill:#5cbfb0;}
+.dot-g:hover .dot-inner{fill:#9eeee5;}
+@keyframes pulse{0%,100%{opacity:.4;r:6}50%{opacity:1;r:8}}
+
+/* Zoom controls */
+#zoom-ctrl{position:fixed;bottom:24px;right:16px;display:flex;flex-direction:column;gap:6px;z-index:50;}
+.zb{width:30px;height:30px;background:rgba(8,13,18,.85);border:1px solid var(--border);color:var(--txt2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.zb:hover{border-color:var(--teal-dim);color:var(--teal);}
+
+/* Hint */
+.hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.08em;pointer-events:none;transition:opacity .4s;white-space:nowrap;}
+
+/* Tooltip */
+#tip{position:fixed;background:rgba(6,11,17,.96);border:1px solid var(--border);padding:6px 13px;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.04em;opacity:0;transition:opacity .12s;pointer-events:none;white-space:nowrap;z-index:200;}
+
+/* Panel */
 #panel{position:fixed;right:0;top:62px;bottom:0;width:0;overflow:hidden;transition:width .38s cubic-bezier(.4,0,.2,1);background:rgba(7,12,18,.97);border-left:1px solid var(--border);z-index:150;backdrop-filter:blur(24px);}
-#panel.open{width:min(400px,100vw);}
-.pi{width:min(400px,100vw);height:100%;display:flex;flex-direction:column;}
-.ph{padding:24px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.pr{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:4px;}
-.pn{font-family:'Cinzel',serif;font-size:18px;letter-spacing:.1em;font-weight:400;margin-bottom:9px;}
-.pm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+#panel.open{width:min(380px,100vw);}
+.pi{width:min(380px,100vw);height:100%;display:flex;flex-direction:column;}
+.ph{padding:22px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.pr{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:3px;}
+.pn{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.1em;font-weight:400;margin-bottom:8px;}
+.pm{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
 .tag{font-size:9px;letter-spacing:.14em;padding:3px 9px;border:1px solid rgba(92,191,176,.28);color:var(--teal-dim);font-family:'Cormorant Garamond',serif;}
 .pc{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--muted);font-style:italic;}
-.pf{padding:10px 24px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0;}
+.pf{padding:9px 22px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0;}
 .fb{font-size:9px;letter-spacing:.12em;padding:4px 10px;background:transparent;border:1px solid var(--muted);color:var(--muted);cursor:pointer;font-family:'Cormorant Garamond',serif;transition:all .2s;}
 .fb:hover,.fb.on{border-color:var(--teal-dim);color:var(--teal);}
 .pl{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
 .pl::-webkit-scrollbar{width:3px;}
 .pl::-webkit-scrollbar-thumb{background:var(--teal-dim);}
-.ai{padding:18px 24px;border-bottom:1px solid rgba(92,191,176,.06);transition:background .18s;position:relative;}
+.ai{padding:16px 22px;border-bottom:1px solid rgba(92,191,176,.06);transition:background .18s;position:relative;}
 .ai::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:background .2s;}
 .ai:hover{background:rgba(92,191,176,.04);}
 .ai:hover::before{background:var(--teal-dim);}
-.at{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px;font-family:'Inter',sans-serif;}
+.at{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;font-family:'Inter',sans-serif;}
 .at.thread{color:#5b9bd5;}.at.analyse{color:var(--teal);}.at.macro{color:var(--gold);}.at.note{color:#a07cc5;}
-.ati{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.45;margin-bottom:7px;}
-.ae{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:var(--txt2);line-height:1.6;margin-bottom:10px;}
+.ati{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.45;margin-bottom:6px;font-weight:400;}
+.ae{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:var(--txt2);line-height:1.6;margin-bottom:9px;}
 .af{display:flex;justify-content:space-between;align-items:center;}
 .ad{font-size:10px;color:var(--muted);letter-spacing:.06em;font-family:'Cormorant Garamond',serif;}
 .al{font-size:10px;letter-spacing:.12em;color:var(--teal-dim);text-decoration:none;border-bottom:1px solid rgba(92,191,176,.3);padding-bottom:1px;transition:color .2s;font-family:'Cormorant Garamond',serif;}
 .al:hover{color:var(--teal);}
 .pe{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;text-align:center;}
-.pe p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--muted);line-height:1.7;max-width:240px;}
+.pe p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--muted);line-height:1.7;max-width:220px;}
 .bclose{position:absolute;top:70px;right:12px;width:26px;height:26px;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:10;}
 .bclose:hover{color:var(--teal);border-color:var(--teal-dim);}
-.hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.08em;pointer-events:none;transition:opacity .4s;white-space:nowrap;}
 </style>
 </head>
 <body>
 
 <header>
   <div class="lw">
-    <svg width="40" height="34" viewBox="0 0 60 52" fill="none">
+    <svg width="38" height="32" viewBox="0 0 60 52" fill="none">
       <line x1="8" y1="42" x2="30" y2="10" stroke="#5cbfb0" stroke-width="1.3"/>
       <line x1="30" y1="10" x2="52" y2="20" stroke="#5cbfb0" stroke-width="1.3"/>
       <line x1="52" y1="20" x2="46" y2="42" stroke="#5cbfb0" stroke-width="1.3"/>
@@ -95,13 +112,17 @@ nav{display:flex;align-items:center;gap:22px;}
   </nav>
 </header>
 
-<div id="globe-wrap">
-  <div class="glow-bg"></div>
-  <svg id="globe-svg"></svg>
+<div id="map-wrap">
+  <svg id="map-svg"></svg>
 </div>
 
+<div id="zoom-ctrl">
+  <button class="zb" id="zin">+</button>
+  <button class="zb" id="zout">−</button>
+</div>
+
+<div class="hint" id="hint">Pincez pour zoomer · cliquez sur un pays</div>
 <div id="tip"></div>
-<div class="hint" id="hint">Faites tourner le globe · cliquez sur un pays</div>
 
 <div id="panel">
   <div class="pi">
@@ -122,78 +143,140 @@ nav{display:flex;align-items:center;gap:22px;}
   <button class="bclose" id="pcl">✕</button>
 </div>
 
-<!-- Scripts locaux — doivent être dans le repo -->
 <script src="./d3.min.js"></script>
 <script src="./topojson.min.js"></script>
-
 <script>
-// Tout le code est dans window.onload pour garantir que D3/TopoJSON sont prêts
 window.onload = function() {
 
-const DATA={"United States of America":{region:"Amérique du Nord",tags:["Macro","Dollar"],lat:38,lon:-97,articles:[{type:"macro",title:"La fin du dollar roi ? Dédollarisation et recomposition du système monétaire",excerpt:"Les BRICS accélèrent leur stratégie de contournement du dollar. Analyse des mécanismes structurels.",date:"28 fév. 2025",url:"#"},{type:"analyse",title:"Fed vs inflation : le dilemme impossible de Powell",excerpt:"Entre stabilité des prix et risque de récession, la Fed navigue en territoire inconnu.",date:"14 fév. 2025",url:"#"},{type:"thread",title:"Thread : Les 10 graphiques qui expliquent l'économie américaine en 2025",excerpt:"Un fil de 15 tweets avec les données clés pour comprendre la trajectoire macro US.",date:"3 fév. 2025",url:"#"}]},"China":{region:"Asie-Pacifique",tags:["Géopolitique","Industrie"],lat:35,lon:103,articles:[{type:"analyse",title:"La stratégie économique de Xi : entre relance domestique et expansion extérieure",excerpt:"Comment Pékin articule sa politique industrielle avec ses ambitions géopolitiques globales.",date:"22 fév. 2025",url:"#"},{type:"thread",title:"Thread : Belt & Road Initiative — bilan d'une décennie",excerpt:"Qui a vraiment profité des nouvelles routes de la soie ? Les données surprenantes.",date:"10 jan. 2025",url:"#"},{type:"macro",title:"Déflation chinoise : le Japon des années 90 comme miroir",excerpt:"Les parallèles troublants entre la stagnation japonaise et la Chine.",date:"5 jan. 2025",url:"#"},{type:"note",title:"Yuan digital et surveillance financière",excerpt:"Les implications géopolitiques du e-CNY au-delà de la rhétorique technologique.",date:"18 déc. 2024",url:"#"}]},"Russia":{region:"Eurasie",tags:["Sanctions","Énergie"],lat:61,lon:90,articles:[{type:"analyse",title:"L'économie de guerre russe : résilience ou illusion ?",excerpt:"Malgré les sanctions, la Russie affiche une croissance. Décryptage d'une économie sous perfusion militaire.",date:"25 fév. 2025",url:"#"},{type:"macro",title:"Pétrole russe : les routes de contournement des sanctions",excerpt:"Inde, Chine, Turquie — comment le brut russe continue de circuler malgré les restrictions.",date:"12 fév. 2025",url:"#"}]},"Saudi Arabia":{region:"Moyen-Orient",tags:["Pétrole","Vision 2030"],lat:24,lon:45,articles:[{type:"analyse",title:"Vision 2030 : l'Arabie Saoudite peut-elle vraiment se diversifier ?",excerpt:"MBS parie sur une transformation économique radicale. Les défis structurels restent immenses.",date:"19 fév. 2025",url:"#"},{type:"thread",title:"Thread : L'OPEP+ est-il encore pertinent en 2025 ?",excerpt:"La cohésion du cartel mise à l'épreuve par les intérêts divergents de ses membres.",date:"8 jan. 2025",url:"#"}]},"Germany":{region:"Europe",tags:["Industrie","Énergie"],lat:51,lon:10,articles:[{type:"analyse",title:"Le modèle allemand en crise : la fin du Wirtschaftswunder ?",excerpt:"Désindustrialisation, crise énergétique et vieillissement démographique — l'Allemagne à la croisée des chemins.",date:"20 fév. 2025",url:"#"},{type:"macro",title:"L'Europe face au choc tarifaire américain",excerpt:"Comment l'UE adapte sa stratégie commerciale face au retour du protectionnisme US.",date:"1 mars 2025",url:"#"}]},"France":{region:"Europe",tags:["Déficit","Souveraineté"],lat:46,lon:2,articles:[{type:"analyse",title:"La France en décrochage budgétaire : anatomie d'une crise annoncée",excerpt:"Avec un déficit à 6% du PIB, Paris se retrouve dans le collimateur des marchés et de la Commission.",date:"2 mars 2025",url:"#"}]},"Brazil":{region:"Amérique du Sud",tags:["BRICS","Émergents"],lat:-10,lon:-53,articles:[{type:"analyse",title:"Lula III : ambitions sociales vs contraintes budgétaires",excerpt:"Le retour de Lula confronté aux réalités d'une dette publique croissante.",date:"15 fév. 2025",url:"#"},{type:"thread",title:"Thread : Le Brésil, pivot des BRICS en Amérique Latine",excerpt:"Comment Brasília joue sur plusieurs tableaux dans la rivalité sino-américaine.",date:"20 jan. 2025",url:"#"}]},"India":{region:"Asie du Sud",tags:["Croissance","Géopolitique"],lat:20,lon:78,articles:[{type:"analyse",title:"L'Inde, nouveau centre de gravité économique mondial ?",excerpt:"Avec 1,4 milliard d'habitants et une croissance à 7%, l'Inde redessine les équilibres géoéconomiques.",date:"24 fév. 2025",url:"#"},{type:"macro",title:"Roupie et souveraineté monétaire : la stratégie de Modi",excerpt:"L'Inde développe ses propres infrastructures de paiement pour réduire sa dépendance au dollar.",date:"11 jan. 2025",url:"#"}]},"Turkey":{region:"Eurasie",tags:["Pivot","Inflation"],lat:38,lon:35,articles:[{type:"note",title:"La Turquie, pivot entre Orient et Occident — à quel prix ?",excerpt:"Erdogan navigue entre l'OTAN et les BRICS avec une économie sous tension extrême.",date:"6 fév. 2025",url:"#"}]},"Japan":{region:"Asie-Pacifique",tags:["Yen","Politique monétaire"],lat:36,lon:138,articles:[{type:"macro",title:"La BOJ sort de sa décennie de taux négatifs",excerpt:"Le pivot de la Banque du Japon envoie des ondes de choc sur les marchés obligataires mondiaux.",date:"17 fév. 2025",url:"#"},{type:"analyse",title:"Le carry trade yen : la bombe à retardement des marchés",excerpt:"Des milliers de milliards empruntés en yen. Que se passe-t-il si ça se déboucle ?",date:"28 jan. 2025",url:"#"}]},"South Africa":{region:"Afrique",tags:["BRICS","Émergents"],lat:-29,lon:25,articles:[{type:"analyse",title:"L'Afrique du Sud et les BRICS élargi : entre espoirs et désillusions",excerpt:"Johannesburg accueille la nouvelle géographie des BRICS. Les enjeux pour le continent africain.",date:"9 fév. 2025",url:"#"}]},"Iran":{region:"Moyen-Orient",tags:["Sanctions","Nucléaire"],lat:32,lon:53,articles:[{type:"analyse",title:"L'Iran dans l'axe Moscou-Pékin : une alliance de nécessité",excerpt:"Comment Téhéran s'intègre dans le nouvel ordre alternatif face à l'hégémonie américaine.",date:"7 fév. 2025",url:"#"}]},"Nigeria":{region:"Afrique",tags:["Pétrole","Démographie"],lat:9,lon:8,articles:[{type:"thread",title:"Thread : Le Nigeria en 2025 — la puissance africaine à la croisée des chemins",excerpt:"Démographie explosive, ressources pétrolières, instabilité politique : le paradoxe nigérian.",date:"13 jan. 2025",url:"#"}]},"Arctic":{region:"Arctique",tags:["Géopolitique","Ressources"],lat:85,lon:0,articles:[{type:"analyse",title:"La course à l'Arctique : le nouveau Grand Jeu des puissances",excerpt:"Fonte des glaces, routes maritimes et ressources sous-marines.",date:"1 mars 2025",url:"#"},{type:"thread",title:"Thread : Pourquoi l'Arctique sera l'enjeu géopolitique de la décennie",excerpt:"De la Route du Nord-Est aux revendications territoriales.",date:"15 jan. 2025",url:"#"}]}};
+const DATA = {
+  "United States of America":{region:"Amérique du Nord",tags:["Macro","Dollar"],lat:38,lon:-97,articles:[{type:"macro",title:"La fin du dollar roi ? Dédollarisation et recomposition du système monétaire",excerpt:"Les BRICS accélèrent leur stratégie de contournement du dollar.",date:"28 fév. 2025",url:"#"},{type:"analyse",title:"Fed vs inflation : le dilemme impossible de Powell",excerpt:"Entre stabilité des prix et risque de récession, la Fed navigue en territoire inconnu.",date:"14 fév. 2025",url:"#"},{type:"thread",title:"Thread : Les 10 graphiques qui expliquent l'économie américaine en 2025",excerpt:"Les données clés pour comprendre la trajectoire macro US.",date:"3 fév. 2025",url:"#"}]},
+  "China":{region:"Asie-Pacifique",tags:["Géopolitique","Industrie"],lat:35,lon:103,articles:[{type:"analyse",title:"La stratégie économique de Xi : entre relance domestique et expansion extérieure",excerpt:"Comment Pékin articule sa politique industrielle avec ses ambitions géopolitiques.",date:"22 fév. 2025",url:"#"},{type:"thread",title:"Thread : Belt & Road Initiative — bilan d'une décennie",excerpt:"Qui a vraiment profité des nouvelles routes de la soie ?",date:"10 jan. 2025",url:"#"},{type:"macro",title:"Déflation chinoise : le Japon des années 90 comme miroir",excerpt:"Les parallèles troublants entre la stagnation japonaise et la Chine.",date:"5 jan. 2025",url:"#"},{type:"note",title:"Yuan digital et surveillance financière",excerpt:"Les implications géopolitiques du e-CNY.",date:"18 déc. 2024",url:"#"}]},
+  "Russia":{region:"Eurasie",tags:["Sanctions","Énergie"],lat:61,lon:90,articles:[{type:"analyse",title:"L'économie de guerre russe : résilience ou illusion ?",excerpt:"Malgré les sanctions, la Russie affiche une croissance.",date:"25 fév. 2025",url:"#"},{type:"macro",title:"Pétrole russe : les routes de contournement des sanctions",excerpt:"Inde, Chine, Turquie — comment le brut russe continue de circuler.",date:"12 fév. 2025",url:"#"}]},
+  "Saudi Arabia":{region:"Moyen-Orient",tags:["Pétrole","Vision 2030"],lat:24,lon:45,articles:[{type:"analyse",title:"Vision 2030 : l'Arabie Saoudite peut-elle vraiment se diversifier ?",excerpt:"MBS parie sur une transformation économique radicale.",date:"19 fév. 2025",url:"#"},{type:"thread",title:"Thread : L'OPEP+ est-il encore pertinent en 2025 ?",excerpt:"La cohésion du cartel mise à l'épreuve.",date:"8 jan. 2025",url:"#"}]},
+  "Germany":{region:"Europe",tags:["Industrie","Énergie"],lat:51,lon:10,articles:[{type:"analyse",title:"Le modèle allemand en crise : la fin du Wirtschaftswunder ?",excerpt:"Désindustrialisation, crise énergétique et vieillissement démographique.",date:"20 fév. 2025",url:"#"},{type:"macro",title:"L'Europe face au choc tarifaire américain",excerpt:"Comment l'UE adapte sa stratégie commerciale.",date:"1 mars 2025",url:"#"}]},
+  "France":{region:"Europe",tags:["Déficit","Souveraineté"],lat:46,lon:2,articles:[{type:"analyse",title:"La France en décrochage budgétaire : anatomie d'une crise annoncée",excerpt:"Avec un déficit à 6% du PIB, Paris dans le collimateur des marchés.",date:"2 mars 2025",url:"#"}]},
+  "Brazil":{region:"Amérique du Sud",tags:["BRICS","Émergents"],lat:-10,lon:-53,articles:[{type:"analyse",title:"Lula III : ambitions sociales vs contraintes budgétaires",excerpt:"Le retour de Lula confronté à une dette publique croissante.",date:"15 fév. 2025",url:"#"},{type:"thread",title:"Thread : Le Brésil, pivot des BRICS en Amérique Latine",excerpt:"Comment Brasília joue sur plusieurs tableaux.",date:"20 jan. 2025",url:"#"}]},
+  "India":{region:"Asie du Sud",tags:["Croissance","Géopolitique"],lat:20,lon:78,articles:[{type:"analyse",title:"L'Inde, nouveau centre de gravité économique mondial ?",excerpt:"1,4 milliard d'habitants et une croissance à 7%.",date:"24 fév. 2025",url:"#"},{type:"macro",title:"Roupie et souveraineté monétaire : la stratégie de Modi",excerpt:"L'Inde développe ses propres infrastructures de paiement.",date:"11 jan. 2025",url:"#"}]},
+  "Turkey":{region:"Eurasie",tags:["Pivot","Inflation"],lat:38,lon:35,articles:[{type:"note",title:"La Turquie, pivot entre Orient et Occident — à quel prix ?",excerpt:"Erdogan navigue entre l'OTAN et les BRICS.",date:"6 fév. 2025",url:"#"}]},
+  "Japan":{region:"Asie-Pacifique",tags:["Yen","Politique monétaire"],lat:36,lon:138,articles:[{type:"macro",title:"La BOJ sort de sa décennie de taux négatifs",excerpt:"Le pivot de la Banque du Japon envoie des ondes de choc.",date:"17 fév. 2025",url:"#"},{type:"analyse",title:"Le carry trade yen : la bombe à retardement des marchés",excerpt:"Des milliers de milliards empruntés en yen.",date:"28 jan. 2025",url:"#"}]},
+  "South Africa":{region:"Afrique",tags:["BRICS","Émergents"],lat:-29,lon:25,articles:[{type:"analyse",title:"L'Afrique du Sud et les BRICS élargi : entre espoirs et désillusions",excerpt:"Les enjeux pour le continent africain.",date:"9 fév. 2025",url:"#"}]},
+  "Iran":{region:"Moyen-Orient",tags:["Sanctions","Nucléaire"],lat:32,lon:53,articles:[{type:"analyse",title:"L'Iran dans l'axe Moscou-Pékin : une alliance de nécessité",excerpt:"Comment Téhéran s'intègre dans le nouvel ordre alternatif.",date:"7 fév. 2025",url:"#"}]},
+  "Nigeria":{region:"Afrique",tags:["Pétrole","Démographie"],lat:9,lon:8,articles:[{type:"thread",title:"Thread : Le Nigeria en 2025 — la puissance africaine à la croisée des chemins",excerpt:"Démographie explosive, ressources pétrolières, instabilité politique.",date:"13 jan. 2025",url:"#"}]}
+};
 
 const N2N={4:"Afghanistan",8:"Albania",12:"Algeria",24:"Angola",32:"Argentina",36:"Australia",40:"Austria",50:"Bangladesh",56:"Belgium",64:"Bhutan",68:"Bolivia",76:"Brazil",100:"Bulgaria",104:"Myanmar",116:"Cambodia",120:"Cameroon",124:"Canada",152:"Chile",156:"China",170:"Colombia",178:"Republic of Congo",180:"Dem. Rep. Congo",188:"Costa Rica",192:"Cuba",203:"Czech Republic",208:"Denmark",214:"Dominican Republic",218:"Ecuador",818:"Egypt",222:"El Salvador",231:"Ethiopia",246:"Finland",250:"France",266:"Gabon",276:"Germany",288:"Ghana",300:"Greece",320:"Guatemala",332:"Haiti",340:"Honduras",356:"India",360:"Indonesia",364:"Iran",368:"Iraq",372:"Ireland",376:"Israel",380:"Italy",392:"Japan",400:"Jordan",398:"Kazakhstan",404:"Kenya",410:"South Korea",408:"North Korea",414:"Kuwait",418:"Laos",422:"Lebanon",434:"Libya",484:"Mexico",504:"Morocco",508:"Mozambique",516:"Namibia",528:"Netherlands",554:"New Zealand",566:"Nigeria",578:"Norway",586:"Pakistan",604:"Peru",608:"Philippines",616:"Poland",620:"Portugal",642:"Romania",643:"Russia",682:"Saudi Arabia",686:"Senegal",710:"South Africa",724:"Spain",729:"Sudan",728:"South Sudan",752:"Sweden",756:"Switzerland",760:"Syria",764:"Thailand",792:"Turkey",800:"Uganda",804:"Ukraine",784:"United Arab Emirates",826:"United Kingdom",840:"United States of America",858:"Uruguay",860:"Uzbekistan",862:"Venezuela",704:"Vietnam",887:"Yemen",894:"Zambia",716:"Zimbabwe"};
 
-const wrap = document.getElementById('globe-wrap');
-const svgEl = document.getElementById('globe-svg');
-const svg = d3.select('#globe-svg');
+const mapWrap = document.getElementById('map-wrap');
+const svgEl = document.getElementById('map-svg');
+const svg = d3.select('#map-svg');
 const tip = document.getElementById('tip');
 
-let W, H, R;
-function getSize(){
-  W = wrap.clientWidth; H = wrap.clientHeight;
-  R = Math.min(W, H) * 0.43;
-  if(R > 300) R = 300;
-}
-getSize();
+let W = mapWrap.clientWidth;
+let H = mapWrap.clientHeight;
 svg.attr('width', W).attr('height', H);
 
+// Defs gradient mer
 const defs = svg.append('defs');
-const og = defs.append('radialGradient').attr('id','oceanGrad').attr('cx','35%').attr('cy','30%');
-og.append('stop').attr('offset','0%').attr('stop-color','#0d2236');
-og.append('stop').attr('offset','60%').attr('stop-color','#091827');
-og.append('stop').attr('offset','100%').attr('stop-color','#050d14');
-const ag = defs.append('radialGradient').attr('id','atmGrad').attr('cx','50%').attr('cy','50%').attr('r','50%');
-ag.append('stop').attr('offset','90%').attr('stop-color','rgba(92,191,176,0)');
-ag.append('stop').attr('offset','100%').attr('stop-color','rgba(92,191,176,0.08)');
-const clip = defs.append('clipPath').attr('id','globeClip');
-clip.append('circle').attr('cx', W/2).attr('cy', H/2).attr('r', R);
+const seaGrad = defs.append('radialGradient').attr('id','seaGrad').attr('cx','50%').attr('cy','40%');
+seaGrad.append('stop').attr('offset','0%').attr('stop-color','#0d2236');
+seaGrad.append('stop').attr('offset','100%').attr('stop-color','#050d14');
 
-const starG = svg.append('g');
-for(let i=0;i<200;i++){
-  starG.append('circle').attr('cx',Math.random()*W).attr('cy',Math.random()*H)
-    .attr('r',Math.random()*0.7+0.1)
-    .attr('fill',`rgba(200,220,240,${(Math.random()*0.4+0.08).toFixed(2)})`);
-}
-
-const globeG = svg.append('g').attr('clip-path','url(#globeClip)');
-let rotation = [10,-25,0];
-const projection = d3.geoOrthographic().scale(R).translate([W/2,H/2]).rotate(rotation).clipAngle(90);
+// Projection Natural Earth
+const projection = d3.geoNaturalEarth1()
+  .scale(W / 6.5)
+  .translate([W / 2, H / 2]);
 const pathGen = d3.geoPath().projection(projection);
-const graticule = d3.geoGraticule().step([20,20]);
+const graticule = d3.geoGraticule().step([20, 20]);
 
-globeG.append('path').datum({type:'Sphere'}).attr('class','ocean-sphere').attr('d',pathGen);
-svg.append('circle').attr('cx',W/2).attr('cy',H/2).attr('r',R*1.04).attr('fill','url(#atmGrad)');
-const gratPath = globeG.append('path').datum(graticule()).attr('class','graticule').attr('d',pathGen);
-const countryG = globeG.append('g');
+// Groupe principal (zoomable)
+const mapG = svg.append('g');
 
-const arcticPoly=[];
-for(let lon=-180;lon<=180;lon+=4) arcticPoly.push([lon,68]);
-const arcticFeat={type:'Feature',geometry:{type:'Polygon',coordinates:[arcticPoly.concat([[180,90],[0,90],[-180,90],[-180,68]])]}};
-const arcticPath = globeG.append('path').datum(arcticFeat).attr('class','arctic-ice').attr('d',pathGen);
+// Fond mer
+mapG.append('path').datum({type:'Sphere'}).attr('class','sphere').attr('d', pathGen);
+// Graticule
+mapG.append('path').datum(graticule()).attr('class','graticule').attr('d', pathGen);
 
-svg.append('circle').attr('cx',W/2).attr('cy',H/2).attr('r',R)
-  .attr('fill','none').attr('stroke','rgba(92,191,176,0.18)').attr('stroke-width','1');
+const countryG = mapG.append('g');
+const dotsG = mapG.append('g');
 
-const dotsG = svg.append('g');
-let allPaths = null;
-let selectedName = null;
+// Zoom
+const zoom = d3.zoom()
+  .scaleExtent([1, 10])
+  .on('zoom', function(event) {
+    mapG.attr('transform', event.transform);
+    // Adapter la taille des dots au zoom
+    const k = event.transform.k;
+    dotsG.selectAll('.dot-inner').attr('r', 3.5 / Math.sqrt(k));
+    dotsG.selectAll('.dot-outer').attr('r', 7 / Math.sqrt(k));
+    dotsG.selectAll('.dot-outer').style('stroke-width', 1 / k);
+    countryG.selectAll('.country').style('stroke-width', 0.3 / k);
+  });
 
+svg.call(zoom);
+
+// Boutons zoom
+document.getElementById('zin').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.5);
+document.getElementById('zout').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 0.67);
+
+// Chargement carte
 fetch('./countries-110m.json')
   .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
   .then(world => {
-    const features = topojson.feature(world, world.objects.countries).features;
-    allPaths = countryG.selectAll('path').data(features).join('path')
-      .attr('class', d => 'country-path' + (N2N[+d.id] && DATA[N2N[+d.id]] ? ' has-data' : ''))
+    const countries = topojson.feature(world, world.objects.countries);
+    const borders = topojson.mesh(world, world.objects.countries, (a,b) => a !== b);
+
+    countryG.selectAll('path')
+      .data(countries.features)
+      .join('path')
+      .attr('class', d => {
+        const name = N2N[+d.id];
+        return 'country' + (name && DATA[name] ? ' has-data' : '');
+      })
       .attr('d', pathGen)
-      .on('mousemove', function(event, d){ const n=N2N[+d.id]; if(n) showTip(event.clientX,event
+      .attr('data-name', d => N2N[+d.id] || '')
+      .on('mousemove', function(event, d) {
+        const name = N2N[+d.id];
+        if(!name) return;
+        showTip(event.clientX, event.clientY, name);
+      })
+      .on('mouseleave', hideTip)
+      .on('click', function(event, d) {
+        const name = N2N[+d.id];
+        if(!name) return;
+        selectCountry(name, d3.select(this));
+        event.stopPropagation();
+      });
+
+    // Frontières
+    mapG.append('path').datum(borders).attr('class','border').attr('d', pathGen);
+
+    // Dots pays avec analyses
+    Object.entries(DATA).forEach(([name, d]) => {
+      const pos = projection([d.lon, d.lat]);
+      if(!pos) return;
+      const g = dotsG.append('g')
+        .attr('class','dot-g')
+        .attr('transform', `translate(${pos[0]},${pos[1]})`)
+        .attr('data-name', name);
+      g.append('circle').attr('class','dot-outer').attr('r', 7).attr('fill','none').attr('stroke','rgba(92,191,176,.4)').attr('stroke-width',1);
+      g.append('circle').attr('class','dot-inner').attr('r', 3.5).attr('fill','#5cbfb0');
+      g.on('mousemove', function(event) {
+        showTip(event.clientX, event.clientY, name);
+        event.stopPropagation();
+      })
+      .on('mouseleave', hideTip)
+      .on('click', function(event) {
+        selectCountry(name, null);
+        event.stopPropagation();
+      });
+    });
+  })
+  .catch(err => console.error('Erreur carte:', err));
+
+// Clic sur fond = fermer panel
+svg.on('click', () => closePanel());
+
+function showTip(mx, my, name) {
+  const d = DATA[name];
+  tip.style.opacity = '1';
+ 
