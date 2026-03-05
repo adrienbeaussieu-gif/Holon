@@ -6,7 +6,7 @@
 <title>HOLON — Géoéconomie</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080d12;--teal:#5cbfb0;--teal-dim:#3a8a7f;--teal-glow:rgba(92,191,176,0.12);--gold:#c9a96e;--gold-dim:#8a6a3a;--txt:#e8e4dc;--txt2:#8fa0b0;--muted:#4a5a6a;--border:rgba(92,191,176,0.15);--red:#c06060;--purple:#a07cc5;}
+:root{--bg:#080d12;--teal:#5cbfb0;--teal-dim:#3a8a7f;--teal-glow:rgba(92,191,176,0.12);--gold:#c9a96e;--txt:#e8e4dc;--txt2:#8fa0b0;--muted:#4a5a6a;--border:rgba(92,191,176,0.15);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'Inter',sans-serif;font-weight:300;color:var(--txt);}
@@ -31,16 +31,11 @@ nav{display:flex;align-items:center;gap:18px;}
 .sphere{fill:#050d14;}
 .border{fill:none;stroke:rgba(92,191,176,.08);stroke-width:.3;}
 .dot-g{cursor:pointer;}
-/* Couleurs dots par catégorie */
-.dot-pays .di{fill:#5cbfb0;} .dot-pays .do{stroke:rgba(92,191,176,.5);}
-.dot-ressource .di{fill:#c9a96e;} .dot-ressource .do{stroke:rgba(201,169,110,.5);}
-.dot-theme .di{fill:#a07cc5;} .dot-theme .do{stroke:rgba(160,124,197,.5);}
 #zoom-ctrl{position:fixed;bottom:24px;right:16px;display:flex;flex-direction:column;gap:6px;z-index:50;}
 .zb{width:32px;height:32px;background:rgba(8,13,18,.9);border:1px solid var(--border);color:var(--txt2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;}
 .zb:hover{border-color:var(--teal-dim);color:var(--teal);}
-/* Légende */
 #legend{position:fixed;bottom:24px;left:20px;display:flex;gap:16px;z-index:50;}
-.leg{display:flex;align-items:center;gap:6px;font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--txt2);letter-spacing:.06em;}
+.leg{display:flex;align-items:center;gap:6px;font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--txt2);}
 .leg-dot{width:8px;height:8px;border-radius:50%;}
 .hint{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.08em;pointer-events:none;transition:opacity .4s;white-space:nowrap;}
 #tip{position:fixed;background:rgba(6,11,17,.96);border:1px solid var(--border);padding:6px 13px;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.04em;opacity:0;transition:opacity .12s;pointer-events:none;white-space:nowrap;z-index:200;}
@@ -50,13 +45,12 @@ nav{display:flex;align-items:center;gap:18px;}
 .ph{padding:22px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .pr{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:3px;}
 .pn{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.1em;font-weight:400;margin-bottom:8px;}
-.pm{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
+.pm{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
 .tag{font-size:9px;letter-spacing:.14em;padding:3px 9px;border:1px solid rgba(92,191,176,.28);color:var(--teal-dim);font-family:'Cormorant Garamond',serif;}
-.tag.gold{border-color:rgba(201,169,110,.4);color:var(--gold-dim);}
-.tag.purple{border-color:rgba(160,124,197,.4);color:var(--purple);}
+.tag.gold{border-color:rgba(201,169,110,.4);color:#8a6a3a;}
+.tag.purple{border-color:rgba(160,124,197,.4);color:#a07cc5;}
 .pc{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--muted);font-style:italic;}
-/* Bloc thèse */
-.pthese{padding:14px 22px;border-bottom:1px solid var(--border);flex-shrink:0;max-height:180px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
+.pthese{padding:14px 22px;border-bottom:1px solid var(--border);flex-shrink:0;max-height:160px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
 .pthese-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-dim);font-family:'Inter',sans-serif;margin-bottom:8px;}
 .pthese-txt{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--txt2);line-height:1.7;font-style:italic;}
 .pthese-txt strong{color:var(--txt);font-style:normal;}
@@ -72,7 +66,7 @@ nav{display:flex;align-items:center;gap:18px;}
 .ai:hover::before{background:var(--teal-dim);}
 .at{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;font-family:'Inter',sans-serif;}
 .at.thread{color:#5b9bd5;}.at.analyse{color:var(--teal);}.at.macro{color:var(--gold);}.at.note{color:#a07cc5;}.at.these{color:#c06060;}
-.ati{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.45;margin-bottom:6px;font-weight:400;}
+.ati{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.45;margin-bottom:6px;}
 .ae{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:var(--txt2);line-height:1.6;margin-bottom:9px;}
 .af{display:flex;justify-content:space-between;align-items:center;}
 .ad{font-size:10px;color:var(--muted);letter-spacing:.06em;font-family:'Cormorant Garamond',serif;}
@@ -141,9 +135,9 @@ nav{display:flex;align-items:center;gap:18px;}
 </div>
 
 <div id="legend">
-  <div class="leg"><div class="leg-dot" style="background:#5cbfb0"></div>Pays / Zone</div>
+  <div class="leg"><div class="leg-dot" style="background:#5cbfb0"></div>Pays</div>
   <div class="leg"><div class="leg-dot" style="background:#c9a96e"></div>Ressources</div>
-  <div class="leg"><div class="leg-dot" style="background:#a07cc5"></div>Thème global</div>
+  <div class="leg"><div class="leg-dot" style="background:#a07cc5"></div>Thème</div>
 </div>
 
 <div class="hint" id="hint">Pincez pour zoomer · cliquez sur un point</div>
@@ -163,11 +157,11 @@ nav{display:flex;align-items:center;gap:18px;}
     </div>
     <div class="pf">
       <button class="fb on" data-f="all">Tout</button>
+      <button class="fb" data-f="these">Thèse</button>
       <button class="fb" data-f="analyse">Analyse</button>
       <button class="fb" data-f="macro">Macro</button>
       <button class="fb" data-f="thread">Thread</button>
       <button class="fb" data-f="note">Note</button>
-      <button class="fb" data-f="these">Thèse</button>
     </div>
     <div class="pl" id="pl"></div>
   </div>
@@ -179,72 +173,51 @@ nav{display:flex;align-items:center;gap:18px;}
 <script>
 window.onload = function() {
 
-// ═══════════════════════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════════════════════
 const DATA = {
-
-  // ── PAYS / ZONES ─────────────────────────────────────
-
-  "États-Unis": {
-    cat: "pays", region: "Amérique du Nord", tags: ["Macro","Dollar","IA","Défense"],
-    lat: 38, lon: -97,
-    these: "Centre financier mondial incontesté. Leadership IA / cloud / semi / défense. Dollar toujours dominant à moyen terme. Politique plus transactionnelle sous Trump : tarifs comme arme géoéconomique, pression budgétaire croissante, polarisation structurelle. <strong>Positionnement :</strong> surpondération sélective sur défense, IA infrastructure, énergie disciplinée. Prudence sur pure growth sans moat profond.",
-    articles: [
-      {type:"these", title:"Forteresse America : le repli stratégique américain et ses conséquences", excerpt:"Trump accentue le découplage : tarifs agressifs, unilatéralisme, réduction des garanties de sécurité. Ce que le repli américain change pour les alliés et les marchés.", date:"1 mars 2025", url:"#"},
-      {type:"macro", title:"Dollar dominant, mais pour combien de temps ?", excerpt:"Dédollarisation lente, diversification progressive des réserves mondiales. Le billet vert reste incontournable à moyen terme — mais son emprise s'érode.", date:"20 fév. 2025", url:"#"},
-      {type:"analyse", title:"IA & défense : le complexe militaro-industriel 2.0", excerpt:"Les États-Unis dominent la chaîne de valeur IA et défense. Une surpondération sélective s'impose sur ces segments à moat profond.", date:"14 fév. 2025", url:"#"},
-      {type:"note", title:"Déficits jumeaux : la vulnérabilité structurelle de l'hyperpuissance", excerpt:"Déficit budgétaire et commercial persistants, dépendance aux capitaux étrangers. Le talon d'Achille du système américain.", date:"3 fév. 2025", url:"#"}
-    ]
-  },
-
-  "Chine": {
-    cat: "pays", region: "Asie-Pacifique", tags: ["Industrie","Découplage","Taiwan"],
-    lat: 35, lon: 103,
-    these: "Puissance industrielle dominante avec excédents massifs. Ambition d'autosuffisance technologique. Fragilités : immobilier, démographie, surcapacités si le monde se referme. <strong>Risque Taiwan :</strong> blocus plus probable qu'invasion totale — coût d'invasion énorme. <strong>Positionnement :</strong> exposition prudente et indirecte, privilégier les chaînes d'approvisionnement alternatives.",
-    articles: [
-      {type:"these", title:"Découplage technologique : Pékin joue l'autosuffisance", excerpt:"Xi accélère le pivot vers l'indépendance technologique. Semi-conducteurs, IA, énergie : la Chine construit ses propres remparts.", date:"22 fév. 2025", url:"#"},
-      {type:"analyse", title:"Taiwan : blocus plutôt qu'invasion — le calcul coût/bénéfice", excerpt:"Une invasion totale de Taiwan détruirait les semi-conducteurs que Pékin convoite. Le scénario d'un blocus progressif est bien plus probable.", date:"15 fév. 2025", url:"#"},
-      {type:"macro", title:"Surcapacités chinoises : la bombe à retardement du commerce mondial", excerpt:"Acier, véhicules électriques, panneaux solaires : la Chine inonde les marchés. Les tensions commerciales avec l'UE et les US ne font que commencer.", date:"8 fév. 2025", url:"#"},
-      {type:"note", title:"Immobilier et déflation : le spectre japonais plane sur Pékin", excerpt:"Les parallèles entre la Chine d'aujourd'hui et le Japon des années 90 se multiplient. La question n'est plus si, mais quand.", date:"20 jan. 2025", url:"#"}
-    ]
-  },
-
-  "Inde": {
-    cat: "pays", region: "Asie du Sud", tags: ["Croissance","Friend-shoring","Démographie"],
-    lat: 20, lon: 78,
-    these: "Grand gagnant potentiel du découplage sino-américain. Démographie favorable, réformes progressives, intégration croissante dans les supply chains alternatives. <strong>Fragilités :</strong> infrastructures insuffisantes, dépendance énergétique. <strong>Positionnement :</strong> surpondération progressive sur le long terme.",
-    articles: [
-      {type:"these", title:"L'Inde, grand gagnant du friend-shoring", excerpt:"Le découplage US-Chine crée un appel d'air pour l'Inde. Démographie, coûts compétitifs, stabilité relative : les conditions d'une ascension structurelle.", date:"24 fév. 2025", url:"#"},
-      {type:"analyse", title:"Infrastructures : le talon d'Achille de la croissance indienne", excerpt:"Routes, ports, énergie — l'Inde court après ses besoins. Le défi infrastructurel conditionne la capacité d'absorption des investissements étrangers.", date:"10 fév. 2025", url:"#"},
-      {type:"macro", title:"Roupie et souveraineté monétaire : la stratégie de Modi", excerpt:"L'Inde développe ses propres infrastructures de paiement pour réduire sa dépendance au dollar et au système SWIFT.", date:"28 jan. 2025", url:"#"}
-    ]
-  },
-
-  "Europe": {
-    cat: "pays", region: "Europe", tags: ["Défense","Value","Réindustrialisation"],
-    lat: 50, lon: 10,
-    these: "Bloc riche mais politiquement fragmenté. Retard relatif en tech stratégique. <strong>Opportunités :</strong> valorisation attractive, accélération défense, réindustrialisation partielle. <strong>Fragilités :</strong> croissance structurellement faible, démographie, dépendance export. <strong>Positionnement :</strong> value/cycliques, défense européenne, industrie/automation.",
-    articles: [
-      {type:"these", title:"Réarmement européen : opportunité d'investissement ou nécessité géopolitique ?", excerpt:"La menace russe et le désengagement américain forcent l'Europe à se réarmer. Pour l'investisseur, c'est un cycle long sur la défense et l'industrie.", date:"1 mars 2025", url:"#"},
-      {type:"analyse", title:"Le modèle allemand en crise : la fin du Wirtschaftswunder ?", excerpt:"Désindustrialisation, crise énergétique, vieillissement démographique. L'Allemagne à la croisée des chemins.", date:"20 fév. 2025", url:"#"},
-      {type:"macro", title:"L'Europe face au choc tarifaire américain", excerpt:"Trump impose des tarifs sur l'UE. Bruxelles s'adapte, mais la dépendance export de l'industrie européenne reste structurelle.", date:"15 fév. 2025", url:"#"},
-      {type:"note", title:"France : souveraineté affichée, dépendance réelle", excerpt:"Paris joue la carte de l'autonomie stratégique, mais le déficit à 6% du PIB fragilise la posture. Crédibilité en question.", date:"2 mars 2025", url:"#"}
-    ]
-  },
-
-  "Russie": {
-    cat: "pays", region: "Eurasie", tags: ["Sanctions","Énergie","Guerre"],
-    lat: 61, lon: 90,
-    these: "Économie de guerre sous perfusion militaire. Malgré les sanctions, la Russie affiche une croissance artificielle tirée par les dépenses d'armement. Réorientation vers la Chine, l'Inde et la Turquie pour les flux énergétiques. <strong>Positionnement :</strong> non investissable directement — surveiller l'impact sur énergie et agri globaux.",
-    articles: [
-      {type:"these", title:"L'économie de guerre russe : résilience ou illusion ?", excerpt:"La croissance russe est dopée aux dépenses militaires. Une fois le conflit terminé, le retour de bâton économique sera brutal.", date:"25 fév. 2025", url:"#"},
-      {type:"analyse", title:"Pétrole russe : les routes de contournement des sanctions", excerpt:"Inde, Chine, Turquie — comment le brut russe continue de circuler malgré les restrictions occidentales.", date:"12 fév. 2025", url:"#"},
-      {type:"macro", title:"Russie-Chine : une alliance de nécessité aux limites structurelles", excerpt:"Moscou est devenu dépendant de Pékin. Un partenariat qui arrange les deux parties — mais avec des asymétries croissantes.", date:"1 fév. 2025", url:"#"}
-    ]
-  },
-
-  "Arabie Saoudite": {
-    cat: "pays", region: "Moyen-Orient", tags: ["Pétrole","Vision 2030","Pivot"],
-    lat: 24, lon: 45,
-    these: "Puissance moyenne par excellence
+  "Etats-Unis":{cat:"pays",region:"Amerique du Nord",tags:["Macro","Dollar","IA","Defense"],lat:38,lon:-97,
+    these:"Centre financier mondial inconteste. Leadership IA / cloud / semi / defense. Dollar toujours dominant a moyen terme. Politique plus transactionnelle sous Trump : tarifs comme arme geoeconomique, pression budgetaire croissante, polarisation structurelle. <strong>Positionnement :</strong> surponderation selective sur defense, IA infrastructure, energie disciplinee. Prudence sur pure growth sans moat profond.",
+    articles:[
+      {type:"these",title:"Forteresse America : le repli strategique americain et ses consequences",excerpt:"Trump accentue le decouplage : tarifs agressifs, unilateralisme, reduction des garanties de securite. Ce que le repli americain change pour les allies et les marches.",date:"1 mars 2025",url:"#"},
+      {type:"macro",title:"Dollar dominant, mais pour combien de temps ?",excerpt:"Dedollarisation lente, diversification progressive des reserves mondiales. Le billet vert reste incontournable a moyen terme, mais son emprise s'erode.",date:"20 fev. 2025",url:"#"},
+      {type:"analyse",title:"IA et defense : le complexe militaro-industriel 2.0",excerpt:"Les Etats-Unis dominent la chaine de valeur IA et defense. Une surponderation selective s'impose sur ces segments a moat profond.",date:"14 fev. 2025",url:"#"},
+      {type:"note",title:"Deficits jumeaux : la vulnerabilite structurelle de l'hyperpuissance",excerpt:"Deficit budgetaire et commercial persistants, dependance aux capitaux etrangers. Le talon d'Achille du systeme americain.",date:"3 fev. 2025",url:"#"}
+    ]},
+  "Chine":{cat:"pays",region:"Asie-Pacifique",tags:["Industrie","Decouplage","Taiwan"],lat:35,lon:103,
+    these:"Puissance industrielle dominante avec excedents massifs. Ambition d'autosuffisance technologique. Fragilites : immobilier, demographie, surcapacites si le monde se referme. <strong>Risque Taiwan :</strong> blocus plus probable qu'invasion totale. <strong>Positionnement :</strong> exposition prudente et indirecte.",
+    articles:[
+      {type:"these",title:"Decouplage technologique : Pekin joue l'autosuffisance",excerpt:"Xi accelere le pivot vers l'independance technologique. Semi-conducteurs, IA, energie : la Chine construit ses propres remparts.",date:"22 fev. 2025",url:"#"},
+      {type:"analyse",title:"Taiwan : blocus plutot qu'invasion, le calcul cout/benefice",excerpt:"Une invasion totale detruirait les semi-conducteurs que Pekin convoite. Le scenario d'un blocus progressif est bien plus probable.",date:"15 fev. 2025",url:"#"},
+      {type:"macro",title:"Surcapacites chinoises : la bombe a retardement du commerce mondial",excerpt:"Acier, vehicules electriques, panneaux solaires : la Chine inonde les marches. Les tensions commerciales ne font que commencer.",date:"8 fev. 2025",url:"#"},
+      {type:"note",title:"Immobilier et deflation : le spectre japonais plane sur Pekin",excerpt:"Les paralleles entre la Chine aujourd'hui et le Japon des annees 90 se multiplient.",date:"20 jan. 2025",url:"#"}
+    ]},
+  "Inde":{cat:"pays",region:"Asie du Sud",tags:["Croissance","Friend-shoring","Demographie"],lat:20,lon:78,
+    these:"Grand gagnant potentiel du decouplage sino-americain. Demographie favorable, reformes progressives. <strong>Fragilites :</strong> infrastructures insuffisantes, dependance energetique. <strong>Positionnement :</strong> surponderation progressive long terme.",
+    articles:[
+      {type:"these",title:"L'Inde, grand gagnant du friend-shoring",excerpt:"Le decouplage US-Chine cree un appel d'air pour l'Inde. Demographie, couts competitifs, stabilite relative : les conditions d'une ascension structurelle.",date:"24 fev. 2025",url:"#"},
+      {type:"analyse",title:"Infrastructures : le talon d'Achille de la croissance indienne",excerpt:"Routes, ports, energie : l'Inde court apres ses besoins. Le defi infrastructurel conditionne la capacite d'absorption des investissements etrangers.",date:"10 fev. 2025",url:"#"},
+      {type:"macro",title:"Roupie et souverainete monetaire : la strategie de Modi",excerpt:"L'Inde developpe ses propres infrastructures de paiement pour reduire sa dependance au dollar.",date:"28 jan. 2025",url:"#"}
+    ]},
+  "Europe":{cat:"pays",region:"Europe",tags:["Defense","Value","Reindustrialisation"],lat:50,lon:10,
+    these:"Bloc riche mais politiquement fragmente. Retard relatif en tech strategique. <strong>Opportunites :</strong> valorisation attractive, acceleration defense, reindustrialisation partielle. <strong>Positionnement :</strong> value/cycliques, defense europeenne, industrie/automation.",
+    articles:[
+      {type:"these",title:"Rearmement europeen : opportunite d'investissement ou necessite geopolitique ?",excerpt:"La menace russe et le desengagement americain forcent l'Europe a se rearmer. Un cycle long sur la defense et l'industrie.",date:"1 mars 2025",url:"#"},
+      {type:"analyse",title:"Le modele allemand en crise : la fin du Wirtschaftswunder ?",excerpt:"Desindustrialisation, crise energetique, vieillissement demographique. L'Allemagne a la croisee des chemins.",date:"20 fev. 2025",url:"#"},
+      {type:"macro",title:"L'Europe face au choc tarifaire americain",excerpt:"Trump impose des tarifs sur l'UE. La dependance export de l'industrie europeenne reste structurelle.",date:"15 fev. 2025",url:"#"},
+      {type:"note",title:"France : souverainete affichee, dependance reelle",excerpt:"Paris joue la carte de l'autonomie strategique, mais le deficit a 6% du PIB fragilise la posture.",date:"2 mars 2025",url:"#"}
+    ]},
+  "Russie":{cat:"pays",region:"Eurasie",tags:["Sanctions","Energie","Guerre"],lat:61,lon:90,
+    these:"Economie de guerre sous perfusion militaire. Croissance artificielle tiree par les depenses d'armement. Reorientation vers la Chine, l'Inde et la Turquie pour les flux energetiques. <strong>Positionnement :</strong> non investissable directement.",
+    articles:[
+      {type:"these",title:"L'economie de guerre russe : resilience ou illusion ?",excerpt:"La croissance russe est dopee aux depenses militaires. Une fois le conflit termine, le retour de baton economique sera brutal.",date:"25 fev. 2025",url:"#"},
+      {type:"analyse",title:"Petrole russe : les routes de contournement des sanctions",excerpt:"Inde, Chine, Turquie : comment le brut russe continue de circuler malgre les restrictions occidentales.",date:"12 fev. 2025",url:"#"},
+      {type:"macro",title:"Russie-Chine : une alliance de necessite aux limites structurelles",excerpt:"Moscou est devenu dependant de Pekin. Un partenariat qui arrange les deux parties, mais avec des asymetries croissantes.",date:"1 fev. 2025",url:"#"}
+    ]},
+  "Arabie Saoudite":{cat:"pays",region:"Moyen-Orient",tags:["Petrole","Vision 2030","Pivot"],lat:24,lon:45,
+    these:"Puissance moyenne par excellence : joue sur plusieurs tableaux (US, Chine, Russie via OPEP+). Vision 2030 : pari sur la diversification avant l'epuisement de la rente petroliere. Incarne la nouvelle agilite des puissances moyennes dans un monde multipolaire.",
+    articles:[
+      {type:"these",title:"L'Arabie Saoudite, archetype de la puissance moyenne agile",excerpt:"Riyad refuse de choisir entre Washington et Pekin. Dans un monde fragmente, les pivots pragmatiques capturent une prime strategique.",date:"19 fev. 2025",url:"#"},
+      {type:"analyse",title:"Vision 2030 : l'Arabie Saoudite peut-elle vraiment se diversifier ?",excerpt:"MBS parie sur le tourisme, la tech et le divertissement. Les defis structurels restent immenses.",date:"10 fev. 2025",url:"#"},
+      {type:"macro",title:"L'OPEP+ comme levier geopolitique : la fin du petrole docile",excerpt:"L'Arabie Saoudite utilise les coupes de production comme outil de pression. L'ere du petrole aligne sur Washington est revolue.",date:"1 fev. 2025",url:"#"}
+    ]},
+  "Bresil":{cat:"pays",region:"Amerique du Sud",tags:["BRICS","Emergents","Commodites"],lat:-10,lon:-53,
+    these:"Pivot potentiel du Sud global. Ressources agricoles et minieres strategiques. Lula joue la carte BRICS et la dedollarisation symbolique, mais les contraintes budgetaires limitent les ambitions. <strong>Positionnement :</strong
