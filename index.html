@@ -220,4 +220,76 @@ fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
       const g = dotsG.append('g').attr('class','dot-g').attr('transform',`translate(${pos[0]},${pos[1]})`);
       g.append('circle').attr('class','do').attr('r',7).attr('fill','none').attr('stroke','rgba(92,191,176,.5)').attr('stroke-width',1);
       g.append('circle').attr('class','di').attr('r',3.5).attr('fill','#5cbfb0');
-      g.on('mousemove', function(e){ showTip(e.clientX,e.clientY,name)
+      g.on('mousemove', function(e){ showTip(e.clientX,e.clientY,name); e.stopPropagation(); })
+       .on('mouseleave', hideTip)
+       .on('click', function(e){ selectCountry(name,null); e.stopPropagation(); });
+    });
+
+    hideLoading();
+  })
+  .catch(() => hideLoading());
+
+svg.on('click', closePanel);
+
+function hideLoading(){
+  const ld = document.getElementById('loading');
+  ld.style.opacity='0';
+  setTimeout(()=>ld.style.display='none', 700);
+}
+
+function showTip(mx,my,name){
+  const d=DATA[name];
+  tip.style.opacity='1'; tip.style.left=(mx+14)+'px'; tip.style.top=(my-10)+'px';
+  tip.innerHTML=`<strong style="color:${d?'#5cbfb0':'#8fa0b0'}">${name}</strong>${d?` <span style="color:#4a5a6a;font-size:11px"> — ${d.articles.length} analyse${d.articles.length>1?'s':''}</span>`:''}`;
+}
+function hideTip(){ tip.style.opacity='0'; }
+
+let curF='all', curD=null;
+function selectCountry(name, pathEl){
+  countryG.selectAll('.country').classed('active',false);
+  if(pathEl) pathEl.classed('active',true);
+  else countryG.selectAll('.country').filter(d=>N2N[+d.id]===name).classed('active',true);
+  curD = DATA[name]||null;
+  document.getElementById('pn').textContent = name;
+  document.getElementById('pr').textContent = curD?curD.region:'—';
+  document.getElementById('pcount').textContent = curD?`${curD.articles.length} analyse${curD.articles.length>1?'s':''}`:'';
+  document.getElementById('ptags').innerHTML = curD?curD.tags.map(t=>`<span class="tag">${t}</span>`).join(''):'';
+  renderList();
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('hint').style.opacity='0';
+}
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+  countryG.selectAll('.country').classed('active',false);
+  document.getElementById('hint').style.opacity='1';
+}
+function renderList(){
+  const el=document.getElementById('pl');
+  if(!curD){el.innerHTML='<div class="pe"><p>Aucune analyse disponible pour cette zone.</p></div>';return;}
+  const items=curF==='all'?curD.articles:curD.articles.filter(a=>a.type===curF);
+  if(!items.length){el.innerHTML='<div class="pe"><p>Aucune analyse de ce type.</p></div>';return;}
+  el.innerHTML=items.map(a=>`<div class="ai"><div class="at ${a.type}">${a.type.toUpperCase()}</div><div class="ati">${a.title}</div><div class="ae">${a.excerpt}</div><div class="af"><span class="ad">${a.date}</span><a href="${a.url}" class="al">Lire →</a></div></div>`).join('');
+}
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); curF=b.dataset.f; renderList();
+  });
+});
+document.getElementById('pcl').addEventListener('click', closePanel);
+
+window.addEventListener('resize',()=>{
+  W=mapWrap.clientWidth; H=mapWrap.clientHeight;
+  svg.attr('width',W).attr('height',H);
+  projection.scale(W/6.5).translate([W/2,H/2]);
+  mapG.selectAll('path').attr('d',pathGen);
+  Object.entries(DATA).forEach(([name,d])=>{
+    const pos=projection([d.lon,d.lat]); if(!pos) return;
+    dotsG.selectAll('.dot-g').filter(function(){ return d3.select(this).attr('data-name')===name; }).attr('transform',`translate(${pos[0]},${pos[1]})`);
+  });
+});
+
+}; // fin window.onload
+</script>
+</body>
+</html>
