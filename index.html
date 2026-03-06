@@ -38,8 +38,8 @@ nav{display:flex;align-items:center;gap:18px;}
 #tip{position:fixed;background:rgba(6,11,17,.96);border:1px solid var(--border);padding:6px 13px;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.04em;opacity:0;transition:opacity .12s;pointer-events:none;white-space:nowrap;z-index:200;}
 #panel{position:fixed;right:0;top:62px;bottom:0;width:0;overflow:hidden;transition:width .38s cubic-bezier(.4,0,.2,1);background:rgba(7,12,18,.97);border-left:1px solid var(--border);z-index:150;backdrop-filter:blur(24px);}
 #panel.open{width:min(380px,100vw);}
-#panel.article-open{width:min(720px,100vw);}
-.pi{width:min(720px,100vw);height:100%;display:flex;flex-direction:column;}
+#panel.article-open{width:min(680px,100vw);}
+.pi{width:min(680px,100vw);height:100%;display:flex;flex-direction:column;}
 .ph{padding:22px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .pr{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:3px;}
 .pn{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.1em;font-weight:400;margin-bottom:8px;}
@@ -564,7 +564,9 @@ function selectCountry(name, pathEl){
   document.getElementById('hint').style.opacity='0';
 }
 function closePanel(){
-  document.getElementById('panel').classList.remove('open');
+  const p = document.getElementById('panel');
+  p.classList.remove('open');
+  p.classList.remove('article-open');
   countryG.selectAll('.country').classed('active',false);
   document.getElementById('hint').style.opacity='1';
 }
@@ -580,7 +582,7 @@ function renderList(){
     <div class="ae">${a.excerpt}</div>
     <div class="af">
       <span class="ad">${a.date}</span>
-      ${a.content ? `<a href="#" class="al" onclick="openArticle(event,${i})">Lire →</a>` : ''}
+      ${a.body ? `<a href="#" class="al" onclick="openArticle(event,${i})">Lire →</a>` : ''}
     </div>
   </div>`).join('');
 }
@@ -621,7 +623,9 @@ function openArticle(e, i){
     + '<div class="art-lead">' + a.excerpt + '</div>'
     + '<div class="art-content">' + a.body + '</div>';
   av.scrollTop = 0;
-  document.getElementById('panel').classList.add('article-open');
+  const panel = document.getElementById('panel');
+  panel.classList.add('open');
+  panel.classList.add('article-open');
 }
 
 // ══════════════════════════════════════════════════════
