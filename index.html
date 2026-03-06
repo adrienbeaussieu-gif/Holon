@@ -519,40 +519,7 @@ function admRenderRight(){
   el.innerHTML = html;
 }
 
-function admEditArticle(i){ admEditIdx = i; admRenderRight(); setTimeout(()=>document.getElementById('adm-form')?.scrollIntoView({behavior:'smooth'}),50); }
-function admNewArticle(){ admEditIdx = 'new'; admRenderRight(); setTimeout(()=>document.getElementById('adm-form')?.scrollIntoView({behavior:'smooth'}),50); }
-function admCancelEdit(){ admEditIdx = null; admRenderRight(); }
-
-function admDeleteArticle(i){
-  if(!confirm('Supprimer cet article ?')) return;
-  DATA[admSelCountry].articles.splice(i, 1);
-  admEditIdx = null;
-  admRenderRight();
-  refreshDots();
-}
-
-function admSaveArticle(){
-  const art = {
-    type: document.getElementById('af-type').value,
-    title: document.getElementById('af-title').value.trim(),
-    excerpt: document.getElementById('af-excerpt').value.trim(),
-    date: document.getElementById('af-date').value.trim(),
-    url: document.getElementById('af-url').value.trim() || '#'
-  };
-  if(!art.title){ alert('Le titre est obligatoire.'); return; }
-  if(!DATA[admSelCountry]) DATA[admSelCountry] = {region:'', tags:[], lat:0, lon:0, articles:[]};
-  if(admEditIdx === 'new'){
-    DATA[admSelCountry].articles.push(art);
-  } else {
-    DATA[admSelCountry].articles[admEditIdx] = art;
-  }
-  admEditIdx = null;
-  admRenderRight();
-  refreshDots();
-}
-
 function refreshDots(){
-  // Mise à jour classe has-data sur les pays
   countryG.selectAll('path').attr('class', d => {
     const name = N2N[+d.id];
     return 'country'+(name && DATA[name] && DATA[name].articles.length ? ' has-data' : '');
@@ -568,9 +535,14 @@ document.getElementById('adm-export-btn').addEventListener('click', () => {
   a.click();
 });
 
-// ── FIN ADMIN ──────────────────────────────────────────
-
 }; // fin window.onload
+
+// ── Fonctions admin globales (onclick inline) ──────────
+function admEditArticle(i){ admEditIdx=i; admRenderRight(); setTimeout(()=>document.getElementById('adm-form')?.scrollIntoView({behavior:'smooth'}),50); }
+function admNewArticle(){ admEditIdx='new'; admRenderRight(); setTimeout(()=>document.getElementById('adm-form')?.scrollIntoView({behavior:'smooth'}),50); }
+function admCancelEdit(){ admEditIdx=null; admRenderRight(); }
+function admDeleteArticle(i){ if(!confirm('Supprimer cet article ?'))return; DATA[admSelCountry].articles.splice(i,1); admEditIdx=null; admRenderRight(); refreshDots(); }
+function admSaveArticle(){ const art={type:document.getElementById('af-type').value,title:document.getElementById('af-title').value.trim(),excerpt:document.getElementById('af-excerpt').value.trim(),date:document.getElementById('af-date').value.trim(),url:document.getElementById('af-url').value.trim()||'#'}; if(!art.title){alert('Le titre est obligatoire.');return;} if(!DATA[admSelCountry])DATA[admSelCountry]={region:'',tags:[],lat:0,lon:0,articles:[]}; if(admEditIdx==='new'){DATA[admSelCountry].articles.push(art);}else{DATA[admSelCountry].articles[admEditIdx]=art;} admEditIdx=null; admRenderRight(); refreshDots(); }
 </script>
 <!-- ADMIN PANEL -->
 <div id="admin-overlay">
