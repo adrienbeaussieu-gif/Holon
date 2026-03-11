@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOLON — Manifeste</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080d12;--teal:#5cbfb0;--teal-dim:#3a8a7f;--teal-glow:rgba(92,191,176,0.12);--gold:#c9a96e;--txt:#e8e4dc;--txt2:#8fa0b0;--muted:#4a5a6a;--border:rgba(92,191,176,0.15);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100%;background:var(--bg);color:var(--txt);}
+body{font-family:'Cormorant Garamond',serif;font-weight:400;}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;background:linear-gradient(180deg,rgba(8,13,18,.98),rgba(8,13,18,.7));backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;}
+.lw{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.lt{font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.28em;color:var(--txt);}
+.ls{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.2em;color:var(--teal);font-style:italic;display:block;margin-top:1px;}
+nav{display:flex;align-items:center;gap:18px;}
+.nl{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.1em;color:var(--txt2);cursor:pointer;transition:color .2s;text-decoration:none;}
+.nl:hover{color:var(--teal);}
+.nl.active{color:var(--teal);}
+.nc{border:1px solid var(--teal-dim);color:var(--teal);padding:5px 14px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.15em;transition:all .25s;cursor:pointer;background:none;text-decoration:none;}
+.nc:hover{background:var(--teal-glow);}
+
+main{max-width:680px;margin:0 auto;padding:110px 24px 80px;}
+
+.m-eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.28em;color:var(--teal);text-transform:uppercase;margin-bottom:32px;}
+
+.m-title{font-family:'Cinzel',serif;font-size:clamp(26px,4vw,38px);font-weight:400;letter-spacing:.12em;color:var(--txt);line-height:1.3;margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border);}
+
+.m-intro{margin-bottom:48px;}
+.m-intro p{font-size:18px;line-height:1.9;color:var(--txt2);margin-bottom:1.4em;font-weight:300;}
+.m-intro p:first-child{font-size:20px;color:var(--txt);font-weight:400;}
+
+.m-section{margin-bottom:48px;}
+.m-section-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:24px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.m-section p{font-size:16px;line-height:1.9;color:var(--txt2);margin-bottom:1.5em;}
+.m-section p:last-child{margin-bottom:0;}
+
+.m-closing{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);}
+.m-closing p{font-size:15px;line-height:1.85;color:var(--muted);font-style:italic;margin-bottom:1em;}
+.m-closing p:last-child{margin-bottom:0;}
+
+.m-sig{margin-top:48px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="lw" href="index.html">
+    <svg width="44" height="44" viewBox="0 0 60 52" fill="none">
+      <line x1="8" y1="42" x2="30" y2="10" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="30" y1="10" x2="52" y2="20" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="52" y1="20" x2="46" y2="42" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="8" y1="42" x2="46" y2="42" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="30" y1="10" x2="46" y2="42" stroke="rgba(92,191,176,.4)" stroke-width="1"/>
+      <line x1="8" y1="42" x2="52" y2="20" stroke="rgba(92,191,176,.4)" stroke-width="1"/>
+      <circle cx="8" cy="42" r="3" fill="#6a7a8a"/>
+      <circle cx="30" cy="10" r="4" fill="#5cbfb0"/>
+      <circle cx="52" cy="20" r="3" fill="#6a7a8a"/>
+      <circle cx="46" cy="42" r="4" fill="#5cbfb0"/>
+    </svg>
+    <div><div class="lt">HOLON</div><span class="ls">— Géoéconomie —</span></div>
+  </a>
+  <nav>
+    <a href="index.html" class="nl">Carte</a>
+    <a href="manifeste.html" class="nl active">Manifeste</a>
+    <a href="#" class="nc">S'ABONNER</a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="m-eyebrow">Manifeste</div>
+
+  <h1 class="m-title">Le monde ne s'effondre pas.<br>Il se réorganise.</h1>
+
+  <div class="m-intro">
+    <p>Le Covid n'était pas une parenthèse. La guerre en Ukraine non plus. La crise énergétique de 2022, l'embrasement du Moyen-Orient, la brutalité du Liberation Day américain — chacun de ces événements a été présenté comme un choc exceptionnel, conjoncturel, appelé à se résorber. Pris séparément, peut-être. Ensemble, ils dessinent autre chose : les symptômes d'une rupture structurelle que nous avons mis du temps à nommer.</p>
+    <p>La mondialisation heureuse est terminée. Après trente ans d'intégration économique ouverte, le monde entre dans une phase de fragmentation que les crises successives n'ont pas créée, mais révélée.</p>
+    <p>C'est l'idée derrière le nom HOLON. En philosophie des systèmes, un holon est quelque chose qui est à la fois une entité complète et une partie d'un ensemble plus grand. Chaque crise que nous traversons a sa logique propre, ses acteurs, ses dynamiques. Mais elle est aussi l'expression d'un tout en train de se recomposer. Comprendre les parties sans voir le tout, c'est faire de la gestion de l'urgence. Comprendre le tout, c'est commencer à naviguer.</p>
+  </div>
+
+  <div class="m-section">
+    <div class="m-section-title">Ce que nous pensons</div>
+
+    <p>La mondialisation ne recule pas au sens d'un retour en arrière. Elle se régionalise. Les flux commerciaux, financiers et technologiques se réorganisent autour de blocs géopolitiques avec leurs propres règles du jeu, leurs propres infrastructures de paiement, leurs propres chaînes d'approvisionnement. Ce mouvement augmente les coûts de friction à peu près partout. Le coût du capital plus élevé depuis 2022 reflète en partie cette réalité : investir dans un monde fragmenté coûte plus cher qu'investir dans un monde intégré.</p>
+
+    <p>Les États-Unis restent le centre du système financier mondial, le leader technologique, la première puissance militaire. Ce socle tient. Mais la façon dont l'Amérique exerce sa puissance a changé de nature. La politique étrangère américaine est devenue ouvertement transactionnelle, les sanctions et les tarifs sont des outils ordinaires de négociation, et la prévisibilité des engagements américains a baissé. Au fond, l'Amérique se retire de son rôle de gendarme du monde. C'est en partie un choix stratégique lucide — concentrer sa puissance sur la rivalité avec la Chine plutôt que de la disperser sur tous les théâtres à la fois. Mais c'est aussi le signe que le modèle impérial ouvert, celui qui consistait à garantir la stabilité mondiale en échange d'un accès privilégié aux marchés et aux institutions, n'est plus soutenable dans une configuration multipolaire. Les autres pays font face à cette réalité de façon très inégale : certains la subissent, d'autres s'y adaptent. Cette ligne de fracture est l'une des plus structurantes du monde qui vient.</p>
+
+    <p>La dédollarisation avance lentement. La part du dollar dans les réserves mondiales est passée de 71% en 2000 à 58% aujourd'hui. Aucune monnaie n'est en mesure de prendre le relais à court terme, et aucun scénario d'effondrement brutal n'est crédible. Mais les banques centrales diversifient vers l'or à un rythme record, les règlements bilatéraux en monnaies locales se multiplient, et l'architecture du système monétaire international se pluralise graduellement. Ce mouvement de fond a des implications réelles pour la construction de portefeuille, même s'il se joue sur une décennie.</p>
+
+    <p>Le centre de gravité du monde se déplace. Pendant des siècles, l'axe atlantique a structuré l'ordre mondial : les échanges, les alliances, les institutions, les guerres. L'OTAN en est l'expression la plus aboutie — et peut-être le dernier monument d'un ordre qui se retire. Le fait que les États-Unis concentrent aujourd'hui leur attention stratégique sur la Chine et non sur la Russie est un aveu : le grand jeu se joue désormais dans le Pacifique. L'Asie du Sud-Est et l'Inde cumulent la démographie, la croissance industrielle et une position géographique au carrefour des deux puissances qui structureront le siècle. Ce basculement du centre des échanges et de la géopolitique de l'Atlantique vers le Pacifique est probablement la tendance longue la plus sous-estimée par les analystes et les investisseurs européens.</p>
+
+    <p>La fragmentation du monde est inconfortable pour les grands blocs rigides. Elle est favorable aux agiles. Les pays qui tireront le mieux parti du monde qui vient ne sont pas forcément les plus grands ni les mieux dotés en ressources. Ce sont ceux qui savent faire le pont entre les blocs, lire rapidement les nouvelles règles du jeu et transformer une position d'intermédiaire en avantage durable. Leur force tient moins à leur poids qu'à leur capacité d'adaptation — la faculté de parler plusieurs langues géopolitiques simultanément, de se rendre indispensables sans s'inféoder, de saisir les opportunités que la rigidité des grandes puissances laisse ouvertes. Dans un monde fragmenté, cette agilité stratégique est une forme de puissance à part entière.</p>
+  </div>
+
+  <div class="m-section">
+    <div class="m-section-title">L'énergie et la technologie</div>
+
+    <p>L'économie, c'est de l'énergie transformée. Ce principe vaut pour comprendre l'histoire longue et pour lire le présent. Le stress énergétique qui s'installe depuis la crise de 2022 est structurel : les gisements faciles s'épuisent, la transition vers les énergies renouvelables crée de nouvelles dépendances en minerais critiques, et la fragmentation géopolitique menace les infrastructures et les routes d'approvisionnement. Les modèles financiers intègrent encore trop peu cette contrainte physique sur la croissance mondiale. Comprendre qui contrôle l'énergie dans le monde qui vient, c'est comprendre où se trouvera le pouvoir.</p>
+
+    <p>L'intelligence artificielle est une rupture technologique d'une ampleur que nous sous-estimons probablement encore. Ce qui la distingue des précédentes, c'est sa capacité à s'auto-alimenter : les modèles s'entraînent sur leurs propres productions, accélèrent leur développement, réduisent le coût de leur amélioration. Cette dynamique cumulative pourrait produire une accélération dont le rythme échappe aux cadres d'analyse habituels. Un point de bascule — où la technologie progresse plus vite que notre capacité collective à l'absorber et à la réguler — n'est pas une certitude, mais c'est un scénario qui mérite d'être pris au sérieux plutôt que relégué à la science-fiction.</p>
+
+    <p>Ce qui est déjà visible, en revanche, c'est la concentration qu'elle induit. L'IA ne redistribue pas la valeur uniformément entre ceux qui l'adoptent. Elle creuse l'écart entre les entreprises qui disposent des données propriétaires, de l'infrastructure de calcul et de la capacité d'intégration profonde dans leurs processus — et toutes les autres. La taille historique, la notoriété, les parts de marché acquises ne constituent pas une protection. Dans chaque secteur, la disruption se joue entre un petit nombre de gagnants qui captent l'essentiel de la valeur créée et une majorité d'acteurs qui subissent une érosion de leurs avantages compétitifs sans toujours en voir clairement la source.</p>
+
+    <p>Quant à savoir si l'IA aggrave la fragmentation géopolitique ou crée un clivage d'une nature entièrement différente, la question reste ouverte. Les États-Unis et la Chine développent déjà des écosystèmes distincts, des standards concurrents, des chaînes d'approvisionnement en puces de calcul que chacun cherche à contrôler. Mais l'IA pourrait aussi produire des effets qui traversent les blocs de façon imprévisible. C'est l'une des variables les plus importantes — et les plus incertaines — du monde qui vient.</p>
+  </div>
+
+  <div class="m-closing">
+    <p>Nous construisons des thèses structurelles sur la géopolitique et l'économie mondiale. Nous les argumentons, nous les confrontons aux faits, et nous en tirons des implications pour la réflexion stratégique et l'allocation d'actifs à moyen et long terme. Nous ne commentons pas les marchés au quotidien. Nous n'émettons pas de recommandations d'achat ou de vente.</p>
+    <p>Nous avons des convictions. Certaines seront fausses. Nous pensons que l'honnêteté sur l'incertitude vaut mieux que la chaleur du consensus.</p>
+  </div>
+
+  <div class="m-sig">HOLON — Géoéconomie mondiale</div>
+
+</main>
+
+</body>
+</html>
