@@ -1,0 +1,796 @@
+<!DOCTYPE html><!-- v143437 -->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOLON — Géoéconomie</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080d12;--teal:#5cbfb0;--teal-dim:#3a8a7f;--teal-glow:rgba(92,191,176,0.12);--gold:#c9a96e;--txt:#e8e4dc;--txt2:#8fa0b0;--muted:#4a5a6a;--border:rgba(92,191,176,0.15);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:'Inter',sans-serif;font-weight:300;color:var(--txt);}
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;background:linear-gradient(180deg,rgba(8,13,18,.98),rgba(8,13,18,.7));backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;}
+.lw{display:flex;align-items:center;gap:12px;}
+.lt{font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.28em;}
+.ls{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.2em;color:var(--teal);font-style:italic;display:block;margin-top:1px;}
+nav{display:flex;align-items:center;gap:18px;}
+.nl{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.1em;color:var(--txt2);cursor:pointer;transition:color .2s;text-decoration:none;}
+.nl:hover{color:var(--teal);}
+.nc{border:1px solid var(--teal-dim);color:var(--teal);padding:5px 14px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.15em;transition:all .25s;cursor:pointer;background:none;}
+.nc:hover{background:var(--teal-glow);}
+#map-wrap{position:fixed;inset:0;top:62px;overflow:hidden;background:var(--bg);}
+#map-svg{width:100%;height:100%;cursor:grab;display:block;}
+#map-svg:active{cursor:grabbing;}
+.country{fill:#162434;stroke:#1a2e42;stroke-width:.3;cursor:pointer;transition:fill .15s,stroke .15s;}
+.country:hover{fill:#1f3a52;stroke:rgba(92,191,176,.4);}
+.country.has-data{fill:#183040;stroke:rgba(92,191,176,.25);}
+.country.has-data:hover{fill:#1e4a62;stroke:rgba(92,191,176,.6);}
+.country.active{fill:#14352f!important;stroke:#5cbfb0!important;stroke-width:.8;}
+.graticule{fill:none;stroke:rgba(255,255,255,.03);stroke-width:.4;}
+.sphere{fill:#050d14;}
+.border{fill:none;stroke:rgba(92,191,176,.08);stroke-width:.3;}
+.dot-g{cursor:pointer;}
+#zoom-ctrl{position:fixed;bottom:24px;right:16px;display:flex;flex-direction:column;gap:6px;z-index:50;}
+.zb{width:32px;height:32px;background:rgba(8,13,18,.9);border:1px solid var(--border);color:var(--txt2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;}
+.zb:hover{border-color:var(--teal-dim);color:var(--teal);}
+.hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--muted);letter-spacing:.08em;pointer-events:none;transition:opacity .4s;white-space:nowrap;}
+#tip{position:fixed;background:rgba(6,11,17,.96);border:1px solid var(--border);padding:6px 13px;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.04em;opacity:0;transition:opacity .12s;pointer-events:none;white-space:nowrap;z-index:200;}
+#panel{position:fixed;right:0;top:62px;bottom:0;width:0;overflow:hidden;transition:width .38s cubic-bezier(.4,0,.2,1);background:rgba(7,12,18,.97);border-left:1px solid var(--border);z-index:150;backdrop-filter:blur(24px);}
+#panel.open{width:min(380px,100vw);}
+#panel.article-open{width:min(680px,100vw);}
+.pi{width:min(680px,100vw);height:100%;display:flex;flex-direction:column;}
+.ph{padding:22px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.pr{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.22em;color:var(--teal);text-transform:uppercase;margin-bottom:3px;}
+.pn{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.1em;font-weight:400;margin-bottom:8px;}
+.pm{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.tag{font-size:9px;letter-spacing:.14em;padding:3px 9px;border:1px solid rgba(92,191,176,.28);color:var(--teal-dim);font-family:'Cormorant Garamond',serif;}
+.pc{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--muted);font-style:italic;}
+.pf{padding:9px 22px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--border);flex-shrink:0;}
+.fb{font-size:9px;letter-spacing:.12em;padding:4px 10px;background:transparent;border:1px solid var(--muted);color:var(--muted);cursor:pointer;font-family:'Cormorant Garamond',serif;transition:all .2s;}
+.fb:hover,.fb.on{border-color:var(--teal-dim);color:var(--teal);}
+.pl{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
+.pl::-webkit-scrollbar{width:3px;}
+.pl::-webkit-scrollbar-thumb{background:var(--teal-dim);}
+.ai{padding:16px 22px;border-bottom:1px solid rgba(92,191,176,.06);transition:background .18s;position:relative;}
+.ai::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:background .2s;}
+.ai:hover{background:rgba(92,191,176,.04);}
+.ai:hover::before{background:var(--teal-dim);}
+.at{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;font-family:'Inter',sans-serif;}
+.at.thread{color:#5b9bd5;}.at.analyse{color:var(--teal);}.at.macro{color:var(--gold);}.at.note{color:#a07cc5;}
+.ati{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--txt);line-height:1.45;margin-bottom:6px;font-weight:400;}
+.ae{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:var(--txt2);line-height:1.6;margin-bottom:9px;}
+.af{display:flex;justify-content:space-between;align-items:center;}
+.ad{font-size:10px;color:var(--muted);letter-spacing:.06em;font-family:'Cormorant Garamond',serif;}
+.al{font-size:10px;letter-spacing:.12em;color:var(--teal-dim);text-decoration:none;border-bottom:1px solid rgba(92,191,176,.3);padding-bottom:1px;transition:color .2s;font-family:'Cormorant Garamond',serif;}
+.al:hover{color:var(--teal);}
+.pe{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;text-align:center;}
+.pe p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--muted);line-height:1.7;max-width:220px;}
+.bclose{position:absolute;top:70px;right:12px;width:26px;height:26px;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:10;}
+.bclose:hover{color:var(--teal);border-color:var(--teal-dim);}
+/* Article view */
+#article-view{display:none;flex:1;overflow-y:auto;flex-direction:column;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
+#article-view::-webkit-scrollbar{width:3px;}
+#article-view::-webkit-scrollbar-thumb{background:var(--teal-dim);}
+#panel.article-open #article-view{display:flex;}
+#panel.article-open .pf{display:none;}
+#panel.article-open #pl{display:none;}
+.art-back{padding:12px 22px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background .15s;}
+.art-back:hover{background:rgba(92,191,176,.04);}
+.art-back span{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.12em;color:var(--muted);}
+.art-back span:hover{color:var(--teal);}
+.art-body{padding:28px 32px;flex:1;}
+.art-type{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-family:'Inter',sans-serif;}
+.art-type.thread{color:#5b9bd5;}.art-type.analyse{color:var(--teal);}.art-type.macro{color:var(--gold);}.art-type.note{color:#a07cc5;}
+.art-title{font-family:'Cinzel',serif;font-size:19px;letter-spacing:.06em;font-weight:400;color:var(--txt);line-height:1.4;margin-bottom:16px;}
+.art-meta{font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--muted);margin-bottom:24px;letter-spacing:.06em;}
+.art-lead{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--txt2);line-height:1.75;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.art-content{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--txt);line-height:1.85;}
+.art-content h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;color:var(--teal);margin:28px 0 10px;text-transform:uppercase;}
+.art-content p{margin-bottom:16px;}
+.art-content strong{color:var(--txt);font-weight:600;}
+.art-content .conviction{background:rgba(92,191,176,.06);border-left:2px solid var(--teal-dim);padding:12px 16px;margin:20px 0;font-style:italic;color:var(--txt2);}
+.art-content .warning{background:rgba(200,140,60,.06);border-left:2px solid rgba(200,140,60,.5);padding:12px 16px;margin:20px 0;font-style:italic;color:rgba(200,160,80,.8);}
+.rzone{cursor:pointer;transition:opacity .2s;}
+.rzone:hover{opacity:1!important;}
+.country.pivot-country{fill:#1c2e3a;stroke:rgba(200,160,80,.2);}
+.country.pivot-country.has-data{fill:#1e3040;}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:300;transition:opacity .7s;}
+.ld-logo{font-family:'Cinzel',serif;font-size:32px;letter-spacing:.35em;}
+.ld-sub{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.22em;color:var(--teal);font-style:italic;}
+.ld-bar{width:160px;height:1px;background:rgba(92,191,176,.12);overflow:hidden;}
+.ld-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal-dim),var(--teal));animation:bf 2s .2s ease-out forwards;}
+@keyframes bf{to{width:100%;}}
+/* MODALE ARTICLE */
+#art-modal{display:none;position:fixed;inset:0;z-index:400;background:rgba(4,8,13,.88);backdrop-filter:blur(10px);overflow-y:auto;}
+#art-modal.open{display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;}
+#art-box{background:#0a1520;border:1px solid rgba(92,191,176,.2);width:min(760px,96vw);position:relative;padding:48px 52px 52px;}
+.art-close{position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border);color:var(--muted);width:28px;height:28px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.art-close:hover{color:var(--teal);border-color:var(--teal-dim);}
+.art-type{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-family:'Inter',sans-serif;margin-bottom:14px;}
+.art-type.thread{color:#5b9bd5;}.art-type.analyse{color:var(--teal);}.art-type.macro{color:var(--gold);}.art-type.note{color:#a07cc5;}
+.art-title{font-family:'Cinzel',serif;font-size:22px;letter-spacing:.06em;font-weight:400;line-height:1.4;color:var(--txt);margin-bottom:16px;}
+.art-meta{font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--muted);letter-spacing:.1em;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.art-body{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--txt2);line-height:1.9;}
+.art-body p{margin-bottom:1.4em;}
+.art-body h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:var(--teal);margin:2em 0 .8em;font-weight:400;}
+.art-body strong{color:var(--txt);font-weight:600;}
+.art-body .conviction{background:rgba(92,191,176,.05);border-left:2px solid var(--teal-dim);padding:14px 18px;margin:1.6em 0;font-style:italic;color:var(--txt);}
+/* ADMIN */
+#admin-overlay{display:none;position:fixed;inset:0;background:rgba(4,8,13,.92);z-index:500;backdrop-filter:blur(8px);}
+#admin-overlay.open{display:flex;align-items:center;justify-content:center;}
+#admin-box{background:#0c1520;border:1px solid rgba(92,191,176,.25);width:min(720px,96vw);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;}
+.adm-hd{padding:18px 22px;border-bottom:1px solid rgba(92,191,176,.15);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.adm-hd h2{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.25em;color:var(--teal);}
+.adm-hd span{font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--muted);font-style:italic;}
+.adm-close{background:none;border:1px solid var(--border);color:var(--muted);width:26px;height:26px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.adm-close:hover{color:var(--teal);border-color:var(--teal-dim);}
+.adm-body{display:flex;flex:1;overflow:hidden;}
+.adm-left{width:200px;flex-shrink:0;border-right:1px solid rgba(92,191,176,.1);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
+.adm-country-item{padding:9px 16px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--txt2);border-bottom:1px solid rgba(92,191,176,.05);transition:all .15s;}
+.adm-country-item:hover{background:rgba(92,191,176,.05);color:var(--txt);}
+.adm-country-item.sel{background:rgba(92,191,176,.08);color:var(--teal);border-left:2px solid var(--teal);}
+.adm-right{flex:1;overflow-y:auto;padding:18px 20px;scrollbar-width:thin;scrollbar-color:var(--teal-dim) transparent;}
+.adm-section-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;color:var(--teal);margin-bottom:12px;}
+.adm-article{background:rgba(255,255,255,.03);border:1px solid rgba(92,191,176,.1);padding:12px 14px;margin-bottom:10px;position:relative;}
+.adm-article-title{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--txt);margin-bottom:4px;}
+.adm-article-meta{font-size:10px;color:var(--muted);font-family:'Cormorant Garamond',serif;}
+.adm-article-actions{position:absolute;top:10px;right:10px;display:flex;gap:6px;}
+.adm-btn-sm{background:none;border:1px solid var(--border);color:var(--muted);font-size:10px;padding:2px 8px;cursor:pointer;font-family:'Cormorant Garamond',serif;transition:all .15s;}
+.adm-btn-sm:hover{color:var(--teal);border-color:var(--teal-dim);}
+.adm-btn-sm.del:hover{color:#e05555;border-color:#e05555;}
+.adm-add-btn{width:100%;padding:9px;background:none;border:1px dashed rgba(92,191,176,.25);color:var(--teal-dim);font-family:'Cormorant Garamond',serif;font-size:12px;cursor:pointer;letter-spacing:.1em;transition:all .2s;margin-top:4px;}
+.adm-add-btn:hover{border-color:var(--teal);color:var(--teal);}
+.adm-form{background:rgba(92,191,176,.04);border:1px solid rgba(92,191,176,.15);padding:16px;margin-top:12px;}
+.adm-form label{display:block;font-size:9px;letter-spacing:.15em;color:var(--muted);margin-bottom:4px;font-family:'Inter',sans-serif;}
+.adm-form input,.adm-form textarea,.adm-form select{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(92,191,176,.15);color:var(--txt);font-family:'Cormorant Garamond',serif;font-size:13px;padding:7px 10px;margin-bottom:12px;outline:none;}
+.adm-form input:focus,.adm-form textarea:focus,.adm-form select:focus{border-color:var(--teal-dim);}
+.adm-form textarea{height:70px;resize:vertical;}
+.adm-form select option{background:#0c1520;}
+.adm-form-actions{display:flex;gap:8px;justify-content:flex-end;}
+.adm-btn{padding:7px 18px;background:none;border:1px solid var(--teal-dim);color:var(--teal);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.15em;cursor:pointer;transition:all .2s;}
+.adm-btn:hover{background:var(--teal-glow);}
+.adm-btn.cancel{border-color:var(--muted);color:var(--muted);}
+.adm-btn.cancel:hover{border-color:var(--txt2);color:var(--txt2);}
+.adm-export{padding:14px 20px;border-top:1px solid rgba(92,191,176,.1);flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.adm-export-note{font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--muted);font-style:italic;flex:1;}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <svg width="54" height="46" viewBox="0 0 60 52" fill="none">
+    <line x1="8" y1="42" x2="30" y2="10" stroke="#5cbfb0" stroke-width="1.3"/>
+    <line x1="30" y1="10" x2="52" y2="20" stroke="#5cbfb0" stroke-width="1.3"/>
+    <line x1="52" y1="20" x2="46" y2="42" stroke="#5cbfb0" stroke-width="1.3"/>
+    <line x1="8" y1="42" x2="46" y2="42" stroke="#5cbfb0" stroke-width="1.3"/>
+    <line x1="30" y1="10" x2="46" y2="42" stroke="rgba(92,191,176,.4)" stroke-width="1"/>
+    <line x1="8" y1="42" x2="52" y2="20" stroke="rgba(92,191,176,.4)" stroke-width="1"/>
+    <circle cx="8" cy="42" r="3.5" fill="#6a7a8a"/>
+    <circle cx="30" cy="10" r="4.5" fill="#5cbfb0"/>
+    <circle cx="52" cy="20" r="3.5" fill="#6a7a8a"/>
+    <circle cx="46" cy="42" r="4.5" fill="#5cbfb0"/>
+  </svg>
+  <div class="ld-logo">HOLON</div>
+  <div class="ld-sub">— Géoéconomie Mondiale —</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<header>
+  <div class="lw" id="logo-wrap">
+    <svg width="38" height="32" viewBox="0 0 60 52" fill="none">
+      <line x1="8" y1="42" x2="30" y2="10" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="30" y1="10" x2="52" y2="20" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="52" y1="20" x2="46" y2="42" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="8" y1="42" x2="46" y2="42" stroke="#5cbfb0" stroke-width="1.3"/>
+      <line x1="30" y1="10" x2="46" y2="42" stroke="rgba(92,191,176,.4)" stroke-width="1"/>
+      <line x1="8" y1="42" x2="52" y2="20" stroke="rgba(92,191,176,.4)" stroke-width="1"/>
+      <circle cx="8" cy="42" r="3" fill="#6a7a8a"/>
+      <circle cx="30" cy="10" r="4" fill="#5cbfb0"/>
+      <circle cx="52" cy="20" r="3" fill="#6a7a8a"/>
+      <circle cx="46" cy="42" r="4" fill="#5cbfb0"/>
+    </svg>
+    <div><div class="lt">HOLON</div><span class="ls">— Géoéconomie —</span></div>
+  </div>
+  <nav>
+    <a href="manifeste.html" class="nl">Manifeste</a>
+    <a class="nl">Analyses</a>
+    <a class="nl">Macro</a>
+    <button class="nl nc">S'ABONNER</button>
+  </nav>
+</header>
+
+<div id="map-wrap"><svg id="map-svg"></svg></div>
+
+<div id="zoom-ctrl">
+  <button class="zb" id="zin">+</button>
+  <button class="zb" id="zout">−</button>
+</div>
+
+<div class="hint" id="hint">Pincez pour zoomer · cliquez sur un pays</div>
+<div id="tip"></div>
+
+<div id="panel">
+  <div class="pi">
+    <div class="ph">
+      <div class="pr" id="pr">Région</div>
+      <div class="pn" id="pn">—</div>
+      <div class="pm"><div id="ptags"></div><div class="pc" id="pcount"></div></div>
+    </div>
+    <div class="pf">
+      <button class="fb on" data-f="all">Tout</button>
+      <button class="fb" data-f="analyse">Analyse</button>
+      <button class="fb" data-f="thread">Thread</button>
+      <button class="fb" data-f="macro">Macro</button>
+      <button class="fb" data-f="note">Note</button>
+    </div>
+    <div class="pl" id="pl"></div>
+    <div id="article-view">
+      <div class="art-back" id="art-back"><span>← Retour</span></div>
+      <div class="art-body" id="art-body"></div>
+    </div>
+  </div>
+  <button class="bclose" id="pcl">✕</button>
+</div>
+
+<!-- Tout depuis unpkg — CDN le plus fiable sur mobile -->
+<script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+
+<script>
+window.onload = function() {
+
+const DATA = {
+
+  "United States of America":{region:"Amérique du Nord",tags:["Géopolitique","Dollar","Protectionnisme"],lat:38,lon:-97,articles:[
+    {type:"macro",title:"Monde fragmenté 2026 : l'hypothèse cadre",excerpt:"Multipolarité croissante, domination US contestée, dédollarisation lente, coût du capital structurellement plus élevé. Les fondements du portefeuille global changent.",date:"1 mars 2026",url:"lire",content:`<h3>Le constat</h3><p>L'hypothèse cadre de HOLON pour 2026 repose sur cinq dynamiques structurelles convergentes : <strong>multipolarité croissante</strong>, domination américaine persistante mais contestée, dédollarisation lente, coût du capital plus élevé qu'avant 2020, et redistribution de la valeur par l'IA.</p><div class='conviction'>Ces cinq dynamiques coexistent et se renforcent mutuellement. Le monde ne bascule pas, il se fragmente graduellement.</div><h3>La fin de la mondialisation heureuse</h3><p>L'ère de l'intégration économique mondiale ouverte, initiée dans les années 90, est structurellement révolue. Elle est remplacée par des alliances régionales et stratégiques. Cette transition produit des frictions, des coûts et des opportunités asymétriques.</p><p>Trump ou pas, la politique américaine a changé de logiciel depuis 2017. Les tarifs, les sanctions et l'America First ne sont pas des aberrations mais des symptômes d'une recomposition profonde face à la montée en puissance chinoise.</p><h3>Dédollarisation : érosion, pas effondrement</h3><p>La part du dollar dans les réserves mondiales est passée de 71% en 2000 à environ 58% aujourd'hui. Aucune monnaie crédible ne peut remplacer le dollar à court terme. Ce que nous vivons est une <strong>multipolarité monétaire progressive</strong>, pas une transition hégémonique.</p><div class='warning'>Le risque n'est pas l'effondrement du dollar mais la multiplication des frictions dans les systèmes de paiement et la montée des coûts de transaction entre blocs.</div><h3>Implications portefeuille</h3><p>Diversifier l'exposition FX au-delà du dollar ; surpondérer les thèmes de souveraineté économique (défense, énergie, infrastructure, ressources critiques) ; intégrer une prime de risque géopolitique permanente. La dispersion sectorielle sera élevée et durable.</p>"},
+    {type:"analyse",title:"La fin du néolibéralisme américain : rupture ou pause ?",excerpt:"Retrait des accords multilatéraux, tarifs agressifs, sécurisation industrielle — Trump ou pas, la politique américaine a changé de logiciel. Les mécanismes de marché restent, le consensus de Washington non.`,date:"15 fév. 2026",url:"#"},
+    {type:"macro",title:"Dédollarisation : érosion lente, pas effondrement",excerpt:"La part du dollar dans les réserves mondiales recule graduellement. Pas de rupture systémique, mais une multipolarité monétaire qui s'installe. Implication : diversifier FX, sous-pondérer USD structurellement.",date:"28 fév. 2026",url:"#"},
+    {type:"analyse",title:"Découplage US-Chine : le vrai coût pour les portefeuilles",excerpt:"Les barrières technologiques et tarifaires sont réelles et progressives. Les supply chains se segmentent. Prime de risque géopolitique inévitable sur les actifs exposés.",date:"10 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Fed, inflation, taux — le nouveau régime macro",excerpt:"L'environnement post-2020 est structurellement différent : inflation modérée mais persistante, taux plus élevés qu'avant. Actions positives mais dispersion sectorielle élevée.",date:"3 fév. 2026",url:"#"}
+  ]},
+
+  "China":{region:"Asie-Pacifique",tags:["Géopolitique","Semi-conducteurs","Découplage"],lat:35,lon:103,articles:[
+    {type:"analyse",title:"Autosuffisance technologique : la grande ambition de Xi",excerpt:"Pékin investit massivement pour s'affranchir des dépendances occidentales en semi-conducteurs, IA et énergie. Un pari de long terme aux implications géopolitiques majeures.",date:"22 fév. 2026",url:"lire",content:`<h3>Le projet Made in China 2025</h3><p>Depuis 2015, la Chine a engagé une stratégie systématique d'autosuffisance technologique. L'objectif : maîtriser en interne les technologies critiques — semi-conducteurs, IA, biotechnologies, énergies renouvelables. Ce projet s'est accéléré après les sanctions américaines sur Huawei (2019) et les restrictions sur les puces avancées (2022-2023).</p><h3>Semi-conducteurs : le talon d'Achille</h3><p>La Chine consomme environ 60% de la production mondiale de semi-conducteurs mais n'en produit que 15% localement. L'écart technologique avec TSMC sur les noeuds avancés reste immense. Pékin y investit des dizaines de milliards via le Big Fund, mais les sanctions sur les équipements lithographiques (ASML) ralentissent la progression.</p><div class='conviction'>Notre conviction : la Chine atteindra une autonomie partielle sur les puces matures (28nm+) d'ici 2027-2028. Les puces avancées restent hors de portée à 5 ans.</div><h3>IA : un avantage compétitif réel</h3><p>Sur l'intelligence artificielle, la Chine dispose d'atouts structurels sous-estimés : masse de données, volonté d'État, déploiement industriel rapide. Des modèles comme DeepSeek ont démontré que l'écart avec les leaders américains se réduisait plus vite que prévu.</p><h3>Implications portefeuille</h3><p>Le découplage technologique crée deux marchés parallèles. Prime de risque sur les entreprises exposées à la Chine dans les secteurs critiques, opportunités sur les fournisseurs alternatifs aux supply chains chinoises (Vietnam, Inde, Mexique).</p>"},
+    {type:"macro",title:"Déflation chinoise : le piège japonais est-il inévitable ?",excerpt:"Les parallèles avec le Japon des années 90 sont troublants : bulle immobilière dégonflée, consommation atone, excès de capacités. Le scénario de la décennie perdue est sur la table.`,date:"5 fév. 2026",url:"#"},
+    {type:"analyse",title:"Taiwan : pourquoi l'invasion reste improbable à court terme",excerpt:"L'interconnexion industrielle rend un conflit extraordinairement coûteux pour Pékin. Les escalades asymétriques restent le scénario central.",date:"14 jan. 2026",url:"#"},
+    {type:"thread",title:"Thread : Belt & Road — bilan d'une décennie de soft power",excerpt:"Qui a vraiment profité des nouvelles routes de la soie ? La réponse est plus nuancée qu'attendu.",date:"10 jan. 2026",url:"#"}
+  ]},
+
+  "Russia":{region:"Eurasie",tags:["Guerre","Sanctions","Énergie"],lat:61,lon:90,articles:[
+    {type:"analyse",title:"L'économie de guerre russe : jusqu'où peut-elle tenir ?",excerpt:"Malgré les sanctions, la Russie affiche une croissance dopée par les dépenses militaires. Mais les déséquilibres s'accumulent : inflation, pénurie de main-d'oeuvre, dépendance aux hydrocarbures.",date:"25 fév. 2026",url:"lire",content:`<h3>Une résilience réelle, des fragilités profondes</h3><p>Contrairement aux prévisions de 2022, l'économie russe n'a pas effondré sous les sanctions. Le PIB a progressé en 2023-2024, tiré par les dépenses militaires colossales (7-8% du PIB), la substitution aux importations et la réorientation des échanges vers l'Asie. Mais cette croissance est une <strong>croissance de guerre</strong> : elle masque des déséquilibres structurels qui s'aggravent.</p><h3>Les déséquilibres qui s'accumulent</h3><p>L'inflation dépasse 8-9% malgré des taux directeurs à 16%. La pénurie de main-d'oeuvre est aigüe : 3 millions d'hommes mobilisés ou morts, plusieurs centaines de milliers de qualifiés expatriés. Le rouble est stabilisé par des contrôles de capitaux, pas par des fondamentaux sains.</p><div class='warning'>La dépendance aux hydrocarbures reste totale : 60-70% des recettes budgétaires. Toute baisse durable du prix du pétrole fragilise massivement le modèle.</div><h3>Scénario post-conflit</h3><p>Quel que soit le dénouement ukrainien, la Russie sort de ce cycle isolée de l'Occident pour une génération. Son ancrage dans l'axe Chine-Iran-BRICS est désormais structurel. Moscou restera un acteur géopolitique majeur mais avec une économie durablement affaiblie et une dépendance accrue à Pékin.</p>"},
+    {type:"macro",title:"Pétrole russe : les routes de contournement persistent",excerpt:"Inde, Chine, Turquie — le brut russe continue de circuler via des circuits alternatifs. Les sanctions ont redirigé les flux, pas supprimé les revenus.`,date:"12 fév. 2026",url:"#"},
+    {type:"note",title:"Russie post-guerre : quel scénario de sortie ?",excerpt:"Quel que soit le dénouement du conflit ukrainien, la Russie sort isolée de l'Occident pour une génération. Son ancrage dans l'axe Chine-Iran redessine la géopolitique eurasiatique.",date:"1 fév. 2026",url:"#"}
+  ]},
+
+  "Ukraine":{region:"Europe de l'Est",tags:["Guerre","Reconstruction","Pivot"],lat:49,lon:31,articles:[
+    {type:"analyse",title:"Ukraine, pivot de l'échiquier mondial — Brzezinski avait raison",excerpt:"Dans Le Grand Échiquier, Brzezinski identifiait l'Ukraine comme pivot géopolitique absolu. Le conflit le confirme : qui contrôle l'Ukraine oriente l'architecture sécuritaire de l'Europe entière.",date:"20 fév. 2026",url:"lire",content:`<h3>Le Grand Échiquier revisité</h3><p>En 1997, Zbigniew Brzezinski publiait Le Grand Échiquier. Sa thèse centrale : pour maintenir la primauté mondiale, les États-Unis devaient empêcher toute puissance hostile de dominer l'Eurasie. Et l'Ukraine y occupait une place absolue : <em>sans l'Ukraine, la Russie cesse d'être un empire eurasiatique.</em></p><p>Le conflit en cours est la validation empirique de cette thèse. L'Ukraine n'est pas qu'un territoire disputé — c'est le pivot qui détermine si la Russie peut reconstituer une sphère d'influence eurasiatique.</p><h3>Transformations architecturales irréversibles</h3><p>La guerre a accéléré plusieurs transformations structurelles de l'architecture européenne : réarmement de la Pologne et des Baltes, adhésion Suède/Finlande à l'OTAN, fin de la dépendance gazière à la Russie. Ces transformations sont <strong>irréversibles</strong> quel que soit le dénouement militaire.</p><div class='conviction'>Notre conviction : l'Ukraine restera un État indépendant avec une orientation européenne. L'adhésion à l'UE est probable à 5-7 ans. L'adhésion à l'OTAN reste bloquée par les réticences américaines.</div><h3>La reconstruction : enjeu d'investissement majeur</h3><p>La Banque mondiale évalue les besoins à 486 milliards USD sur dix ans. C'est le plus grand chantier d'Europe depuis 1945 — potentiellement la plus grande opportunité d'investissement sur le continent dans la prochaine décennie. Conditionnée à trois variables : stabilisation du front, cadre juridique fiable, financement occidental structuré.</p>"},
+    {type:"macro",title:"Reconstruction ukrainienne : le plus grand chantier d'Europe depuis 1945",excerpt:"486 Mds USD de besoins estimés. Un enjeu d'investissement massif, conditionné à la stabilisation politique et à l'intégration européenne.`,date:"15 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Ukraine dans l'UE — calendrier, obstacles, implications",excerpt:"Le processus d'adhésion avance plus vite que prévu. Implications pour les fonds structurels, l'agriculture et l'équilibre politique de l'UE.",date:"5 jan. 2026",url:"#"}
+  ]},
+
+  "Poland":{region:"Europe de l'Est",tags:["OTAN","Pivot","Défense"],lat:52,lon:20,articles:[
+    {type:"analyse",title:"Pologne : la puissance montante de l'Europe centrale",excerpt:"Pivot stratégique de l'OTAN à l'Est, réarmement massif (4% du PIB en défense), croissance solide. Un cas d'école de repositionnement géopolitique gagnant.",date:"18 fév. 2026",url:"lire",content:`<h3>Le repositionnement polonais</h3><p>La Pologne a réalisé en trente ans l'une des transformations économiques les plus spectaculaires d'Europe. PIB multiplié par 6 depuis 1990, rattrapage quasi-complet des niveaux de vie d'Europe occidentale, fondé sur l'industrie manufacturière et l'intégration dans les supply chains allemandes.</p><h3>Le réarmement : un pari stratégique assumé</h3><p>Depuis 2022, la Pologne consacre 4% de son PIB à la défense — le niveau le plus élevé de l'OTAN. Varsovie a commandé des centaines de chars Abrams et K2, des systèmes HIMARS, des F-35. Ce réarmement n'est pas rhétorique : la Pologne se prépare concrètement à être le flanc Est de l'OTAN face à une Russie structurellement agressive.</p><div class='conviction'>La Pologne est le pivot le plus solide de l'Europe centrale. Son positionnement pro-atlantiste, sa taille (38M d'habitants, 9ème PIB de l'UE) et sa dynamique économique en font un acteur incontournable.</div><h3>Le triangle Pologne-Hongrie-Slovaquie</h3><p>À l'intérieur de l'Europe centrale, trois visions antagonistes coexistent. La Pologne pro-atlantiste et pro-UE. La Hongrie d'Orbán qui construit un modèle illibéral en maintenant des liens avec Moscou et Pékin. La Slovaquie de Fico qui a opéré un pivot pro-russe surprenant. Cette fracture reflète des clivages culturels profonds sur la nature de la souveraineté et la mémoire des empires.</p>"},
+    {type:"macro",title:"Triangle Pologne-Hongrie-Slovaquie : trois visions de l'Europe centrale",excerpt:"Trois rapports radicalement différents à Bruxelles, à l'OTAN et à la Russie. Une fracture durable au coeur de l'Europe.`,date:"10 fév. 2026",url:"#"},
+    {type:"note",title:"Hongrie : l'outsider qui joue sa propre partition",excerpt:"Orbán construit un modèle illibéral en plein coeur de l'UE, maintient des liens avec Moscou et Pékin. Une anomalie ou un signal précurseur ?",date:"28 jan. 2026",url:"#"}
+  ]},
+
+  "Norway":{region:"Europe du Nord",tags:["Fonds souverain","Hors-euro","Modèle nordique"],lat:65,lon:14,articles:[
+    {type:"analyse",title:"Le fonds souverain norvégien : leçon de capitalisme d'État vertueux",excerpt:"La Norvège a transformé sa rente pétrolière en patrimoine collectif transgénérationnel. Le GPFG, 1 700 Mds USD, est le plus grand fonds souverain au monde.",date:"22 fév. 2026",url:"lire",content:`<h3>La règle d'or norvégienne</h3><p>En 1990, la Norvège a créé le Government Pension Fund Global (GPFG) pour gérer les revenus pétroliers. La règle est simple et d'une rigueur remarquable : <strong>le capital est intouchable, seuls les rendements (4% par an) peuvent financer le budget.</strong> Aujourd'hui, le fonds pèse environ 1 700 milliards USD — soit 330 000 USD par Norvégien.</p><h3>Pourquoi c'est exceptionnel</h3><p>La plupart des pays producteurs de pétrole ont dilapidé leur rente (Nigeria, Venezuela) ou l'ont utilisée pour des dépenses courantes. La Norvège a fait le choix inverse : transformer une ressource épuisable en capital financier permanent, investi dans 9 000 entreprises dans 70 pays, avec des règles ESG strictes et une gouvernance transparente.</p><div class='conviction'>Le GPFG est la démonstration que la gestion vertueuse d'une rente naturelle est possible — avec les institutions adéquates. C'est un modèle que les pays du Golfe tentent partiellement de répliquer.</div><h3>Hors-euro : un choix stratégique payant</h3><p>Avec la Suède, le Danemark et la Suisse, la Norvège a conservé sa monnaie nationale. La couronne norvégienne lui permet d'ajuster sa compétitivité et d'absorber les chocs pétroliers. Leur performance collective réfute empiriquement l'idée que l'euro serait indispensable à la prospérité en Europe.</p><h3>OTAN et Arctique</h3><p>L'adhésion de la Suède et de la Finlande à l'OTAN a transformé la mer Baltique en lac OTAN. La Norvège, qui partage 196 km de frontière avec la Russie dans l'Arctique, bénéficie structurellement de ce renforcement. La région arctique devient un enjeu géopolitique croissant : routes maritimes, ressources sous-marines, surveillance stratégique.</p>"},
+    {type:"macro",title:"Modèle nordique 2026 : toujours compétitif ?",excerpt:"HDI élevé, finances publiques saines, innovation forte. Mais immigration, coût du welfare et exposition à la Russie mettent le modèle sous tension.`,date:"10 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Suède et Finlande dans l'OTAN — un tournant historique",excerpt:"Après des décennies de neutralité, Stockholm et Helsinki ont rejoint l'OTAN. Implications pour la sécurité baltique et les dépenses de défense scandinaves.",date:"5 jan. 2026",url:"#"},
+    {type:"note",title:"Europe hors-euro : un choix de souveraineté monétaire",excerpt:"Norvège, Suède, Danemark, Suisse ont conservé leur monnaie. Leur performance invalide l'idée que l'euro serait indispensable à la prospérité européenne.",date:"15 jan. 2026",url:"#"}
+  ]},
+
+  "Switzerland":{region:"Europe",tags:["Neutralité","Finance","Agilité"],lat:47,lon:8,articles:[
+    {type:"analyse",title:"La Suisse : anatomie d'un pays sans ressources qui surperforme",excerpt:"Pas de pétrole, pas de grande taille, pas d'empire. Pourtant l'un des PIB par habitant les plus élevés au monde. La recette : institutions, fédéralisme, spécialisation dans la valeur maximale.",date:"20 fév. 2026",url:"lire",content:`<h3>Le paradoxe suisse</h3><p>La Suisse n'a pas de pétrole, pas d'accès à la mer, pas de grande taille. Et pourtant elle affiche systématiquement l'un des trois PIB par habitant les plus élevés au monde (environ 90 000 USD), une dette publique modeste et une monnaie ultra-solide.</p><h3>La recette institutionnelle</h3><p>Le <strong>fédéralisme fort</strong> — 26 cantons avec une autonomie fiscale réelle — crée une compétition saine entre territoires. La <strong>démocratie directe</strong> ancre les décisions dans un large consensus social et rend les retournements politiques brusques quasi impossibles. La stabilité institutionnelle multicentenaire produit une confiance qui attire capitaux et talents.</p><h3>Spécialisation dans la valeur maximale</h3><p>La Suisse s'est spécialisée dans les secteurs où la valeur ajoutée par employé est la plus élevée : <strong>pharmaceutique</strong> (Novartis, Roche), <strong>finance privée</strong> (gestion de fortune internationale), <strong>horlogerie de luxe</strong>, <strong>ingénierie de précision</strong>. Cette spécialisation est le résultat d'une stratégie de long terme fondée sur la qualité plutôt que le volume.</p><div class='conviction'>La Suisse démontre avec Singapour et les Émirats que la taille et les ressources naturelles ne déterminent pas le développement. Ce sont les institutions et la gouvernance qui font la différence.</div><h3>Neutralité sous pression</h3><p>La guerre en Ukraine a mis la neutralité suisse à rude épreuve. Berne a rejoint les sanctions européennes — une première. Les pressions pour autoriser la réexportation d'armes vers l'Ukraine ont été refusées, suscitant des frictions. La neutralité reste un actif stratégique mais son périmètre se réduit dans un monde bipolaire.</p>"},
+    {type:"macro",title:"Neutralité helvétique sous pression : jusqu'où tenir ?",excerpt:"Les sanctions contre la Russie et les pressions sur les armes testent la neutralité suisse. Un équilibre de plus en plus difficile à maintenir.`,date:"8 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Singapour, Suisse, Émirats — le modèle des petits États agiles",excerpt:"Trois territoires qui surperforment sans ressources ni profondeur stratégique. Institutions fortes, neutralité, spécialisation dans la valeur maximale.",date:"25 jan. 2026",url:"#"}
+  ]},
+
+  "France":{region:"Europe",tags:["Politique","Désindustrialisation","Institutions"],lat:46,lon:2,articles:[
+    {type:"analyse",title:"La crise française est institutionnelle, pas seulement budgétaire",excerpt:"Le déficit à 6% du PIB est un symptôme. Le noeud : Ve République sclérosée, élite de la mondialisation heureuse en fin de cycle, démocratie représentative en panne.",date:"2 mars 2026",url:"lire",content:`<h3>Le diagnostic</h3><p>Quand on parle de la crise française, le réflexe est de citer les chiffres budgétaires : déficit à 6% du PIB, dette à 112%, dégradations par les agences de notation. Ces chiffres sont réels mais ce sont des <strong>symptômes</strong>, pas la cause.</p><h3>La Ve République, inadaptée à la complexité contemporaine</h3><p>La Ve République a été conçue en 1958 pour sortir de l'instabilité de la IVe. Elle a rempli ses fonctions avec succès. Mais son architecture hyperprésidentielle, sa concentration du pouvoir et son élitisme technocratique la rendent <strong>structurellement incapable de produire les compromis larges</strong> que requièrent les grandes réformes contemporaines.</p><div class='warning'>La dissolution de 2024 et la paralysie gouvernementale illustrent une vérité simple : la Ve République peut fonctionner avec une majorité absolue ou une cohabitation claire. Dans un paysage fragmenté, elle se bloque.</div><h3>Les élites de la mondialisation heureuse</h3><p>Les élites françaises formées à l'ENA, à Polytechnique, dans les grands corps ont construit leur vision du monde sur deux certitudes : l'intégration européenne comme horizon indépassable, et la mondialisation comme force de progrès naturelle. Ce logiciel est en fin de vie — comme dans la plupart des démocraties occidentales. La différence française est que la reproduction de cette élite est particulièrement fermée et sa capture des institutions particulièrement forte.</p><h3>Désindustrialisation et rapport à l'euro</h3><p>La France a perdu environ 2 millions d'emplois industriels depuis le milieu des années 80. Cette désindustrialisation reflète des choix politiques mais aussi la contrainte de la monnaie unique, qui empêche tout ajustement par le change. La compétitivité-coût de la France s'est dégradée par rapport à l'Allemagne, sans possibilité de dévaluation. Ce débat reste politiquement tabou mais économiquement incontournable.</p><div class='conviction'>La France dispose d'atouts réels (énergie nucléaire, aérospatial, luxe, agriculture). Mais elle ne se réformera pas sans une crise plus sévère qui rende le statu quo insoutenable.</div>"},
+    {type:"macro",title:"Désindustrialisation française : 40 ans de décrochage",excerpt:"2 millions d'emplois industriels perdus en 40 ans. Euro, fiscalité du travail, choix politiques — un décrochage structurel aux causes multiples.`,date:"15 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Élites et mondialisation heureuse — la fin d'un cycle",excerpt:"Les élites formées à l'ENA ont construit leur vision sur l'intégration européenne et la mondialisation. Ce logiciel est en fin de vie. Qui pour le remplacer ?",date:"5 fév. 2026",url:"#"},
+    {type:"note",title:"France et euro : le débat refoulé",excerpt:"La question du rapport de la France à l'euro reste un tabou. Pourtant les écarts de compétitivité avec l'Allemagne et la pression des marchés imposent d'y réfléchir.",date:"20 jan. 2026",url:"#"}
+  ]},
+
+  "Italy":{region:"Europe du Sud",tags:["Fracture nord-sud","Industrie","Politique"],lat:42,lon:13,articles:[
+    {type:"analyse",title:"Italie : la fracture nord-sud, permanente ou surmontable ?",excerpt:"Le triangle Milan-Turin-Bologne est l'un des coeurs manufacturiers d'Europe. Le Sud reste en retard malgré des décennies de transferts. Un dualisme qui pèse sur la compétitivité.",date:"18 fév. 2026",url:"lire",content:`<h3>Deux Italies dans un même pays</h3><p>L'Italie est structurellement un pays dual. Le Nord — triangle Milan-Turin-Bologne et son extension vers le Nord-Est — est l'un des plus denses tissus manufacturiers d'Europe : mécanique de précision, textile haut de gamme, agroalimentaire, design, chimie. Le Sud affiche un PIB par habitant inférieur de 40% au Nord, un chômage structurellement élevé et une dépendance aux transferts publics.</p><h3>Un tissu de PME remarquable</h3><p>Le capitalisme familial italien est souvent moqué pour ses structures de gouvernance opaques. Mais ses résultats à l'export sont incontestables : l'Italie est le 8ème exportateur mondial, avec une balance commerciale positive hors énergie. Des champions cachés dans des niches mondiales — machines-outils, emballage, marbre, mode — constituent un avantage compétitif durable.</p><div class='conviction'>L'Italie industrielle du Nord est un actif sous-valorisé par les marchés, obnubilés par la dette publique. Le spread BTP-Bund reflète le risque souverain, pas la réalité des entreprises exportatrices.</div><h3>Le paradoxe fiscal</h3><p>L'Italie cumule une dette publique à 140% du PIB et une économie souterraine estimée à 180-200 milliards EUR par an. Ce paradoxe produit un État sous-financé face à des dépenses sociales élevées — une équation intenable sans réforme fiscale profonde.</p><h3>Meloni : pragmatisme européen surprenant</h3><p>Arrivée avec une rhétorique eurosceptique, Giorgia Meloni a surpris en adoptant un positionnement pro-OTAN et constructif avec Bruxelles. Son pragmatisme reflète une contrainte réelle : l'Italie dépend massivement des fonds européens (200 Mds EUR du PNRR) et des achats de dette par la BCE.</p>"},
+    {type:"macro",title:"Le paradoxe fiscal italien : évasion, dette record, PME solide",excerpt:"140% de dette publique, 200 Mds EUR d'économie souterraine, et pourtant un tissu de PME exportatrices remarquablement compétitif. Un pays à double vitesse.`,date:"10 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Positionnement méditerranéen — Italie, France, Espagne, Portugal",excerpt:"Quatre pays, même flanc sud de l'OTAN, même interface Afrique-Europe. Mais des stratégies géopolitiques qui divergent profondément.",date:"15 jan. 2026",url:"#"}
+  ]},
+
+  "Spain":{region:"Europe du Sud",tags:["Croissance","Rattrapage","Géopolitique"],lat:40,lon:-4,articles:[
+    {type:"analyse",title:"Espagne : la croissance du rattrapage est-elle durable ?",excerpt:"2-3% de croissance quand l'Europe stagne. Mais tourisme, immobilier et fonds européens soulèvent la question : quelle base productive pour l'après-rattrapage ?",date:"20 fév. 2026",url:"lire",content:`<h3>Une performance macroéconomique réelle</h3><p>L'Espagne est l'une des économies développées les plus dynamiques de 2024-2026 : croissance supérieure à 2%, immigration soutenant la démographie, tourisme record (90M de visiteurs par an), et afflux de télétravailleurs et de capitaux étrangers. Après la traumatisante crise de 2008-2013 (25% de chômage), le pays a engagé des réformes structurelles substantielles.</p><h3>Les fragilités du modèle</h3><p>Mais plusieurs questions structurelles restent sans réponse. La <strong>dépendance au tourisme</strong> (12-13% du PIB) expose l'économie aux chocs externes. L'<strong>investissement en R&D</strong> reste nettement en dessous de la moyenne européenne (1,4% vs 2,2%). La <strong>productivité</strong> stagne. Le marché immobilier surchauffe à nouveau dans les grandes villes.</p><div class='warning'>La question centrale : l'Espagne peut-elle passer d'un modèle de rattrapage à un modèle de création de valeur propre, avec des champions industriels et technologiques ? Le bilan sur ce point est pour l'instant décevant.</div><h3>Positionnement géopolitique : une carte sous-exploitée</h3><p>L'Espagne dispose d'un positionnement exceptionnel : interface naturelle avec l'Amérique latine (langue, culture, investissements), porte d'entrée africaine pour l'Europe, flanc sud de l'OTAN sur l'Atlantique et la Méditerranée. Madrid peine encore à transformer ces atouts en influence réelle. Mais dans un monde fragmenté où les corridors logistiques et les interfaces culturelles ont de la valeur, ce positionnement devient un actif stratégique croissant.</p>"},
+    {type:"macro",title:"Espagne et Portugal : viables économiquement à long terme ?",excerpt:"Réformes post-2010, croissance de rattrapage, mais tissu productif fragile en innovation. Le modèle tourisme + immobilier a des limites.`,date:"8 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Le positionnement géopolitique espagnol — interface Atlantique-Méditerranée-Afrique",excerpt:"Madrid à la charnière entre Europe, Amérique latine et Afrique du Nord. Un positionnement unique encore sous-exploité.",date:"20 jan. 2026",url:"#"}
+  ]},
+
+  "Germany":{region:"Europe",tags:["Industrie","Énergie","Crise"],lat:51,lon:10,articles:[
+    {type:"analyse",title:"Le modèle allemand en crise : la fin du Wirtschaftswunder ?",excerpt:"Désindustrialisation, rupture énergétique, vieillissement démographique, retard numérique. Une convergence de chocs structurels sans précédent depuis la réunification.",date:"20 fév. 2026",url:"#"},
+    {type:"macro",title:"L'Europe face au choc tarifaire américain",excerpt:"Les tarifs Trump touchent l'Allemagne de plein fouet. Son modèle export-led est le plus vulnérable. Comment l'UE s'adapte face à un partenaire américain moins prévisible.",date:"1 mars 2026",url:"#"}
+  ]},
+
+  "Saudi Arabia":{region:"Moyen-Orient",tags:["Pétrole","Vision 2030","Puissance moyenne"],lat:24,lon:45,articles:[
+    {type:"analyse",title:"Vision 2030 : l'Arabie Saoudite peut-elle vraiment se diversifier ?",excerpt:"MBS parie sur une transformation économique radicale. Neom, tourisme, finance — mais la dépendance au pétrole reste massive.",date:"19 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : L'OPEP+ est-il encore pertinent en 2026 ?",excerpt:"La cohésion du cartel est mise à l'épreuve par les intérêts divergents entre Ryad et Moscou.",date:"8 jan. 2026",url:"#"},
+    {type:"analyse",title:"Les puissances moyennes comme faiseurs de roi",excerpt:"Dans un monde multipolaire, Arabie Saoudite, Turquie, Inde et Émirats jouent sur plusieurs tableaux. Leur agilité stratégique devient un avantage compétitif géopolitique.",date:"22 fév. 2026",url:"#"}
+  ]},
+
+  "Brazil":{region:"Amérique du Sud",tags:["BRICS","Émergents","Ressources"],lat:-10,lon:-53,articles:[
+    {type:"analyse",title:"Lula III : ambitions sociales vs contraintes budgétaires",excerpt:"Le retour de Lula confronté à une dette croissante et des marchés peu patients. Le Brésil reste une puissance de ressources naturelles sous-exploitée politiquement.",date:"15 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Le Brésil, pivot des BRICS en Amérique Latine",excerpt:"Comment Brasília joue sur plusieurs tableaux : BRICS+, relations avec Washington, leadership régional.",date:"20 jan. 2026",url:"#"}
+  ]},
+
+  "India":{region:"Asie du Sud",tags:["Croissance","Géopolitique","Puissance moyenne"],lat:20,lon:78,articles:[
+    {type:"analyse",title:"L'Inde, nouveau centre de gravité économique mondial",excerpt:"1,4 milliard d'habitants, croissance à 7%, démographie favorable. L'Inde bénéficie du friend-shoring. Mais défis structurels immenses : infrastructure, éducation, formalisation.",date:"24 fév. 2026",url:"#"},
+    {type:"macro",title:"Roupie et souveraineté monétaire : la stratégie de Modi",excerpt:"L'Inde développe ses propres infrastructures de paiement (UPI) et milite pour les règlements bilatéraux en monnaie locale.",date:"11 jan. 2026",url:"#"},
+    {type:"thread",title:"Thread : L'Inde refuse de choisir — et c'est sa force",excerpt:"New Delhi maintient des relations avec Washington, Moscou et Pékin simultanément. La non-appartenance à un bloc devient un avantage stratégique.",date:"3 fév. 2026",url:"#"}
+  ]},
+
+  "Turkey":{region:"Eurasie",tags:["Pivot","Inflation","Puissance moyenne"],lat:38,lon:35,articles:[
+    {type:"analyse",title:"La Turquie, pivot entre Orient et Occident",excerpt:"Erdogan navigue entre l'OTAN, les BRICS et les pays du Golfe. Malgré une inflation chronique, la Turquie tire parti de sa position géographique unique.",date:"6 fév. 2026",url:"#"},
+    {type:"macro",title:"Économie turque : résilience malgré l'orthodoxie monétaire tardive",excerpt:"Après des années de politique hétérodoxe, la banque centrale turque a relevé ses taux massivement. Désinflation en cours, mais lire fragile.",date:"15 jan. 2026",url:"#"}
+  ]},
+
+  "Japan":{region:"Asie-Pacifique",tags:["Yen","Politique monétaire"],lat:36,lon:138,articles:[
+    {type:"macro",title:"La BOJ sort de sa décennie de taux négatifs",excerpt:"Le pivot de la Banque du Japon envoie des ondes de choc. Le carry trade yen se dénoue — avec des implications pour tous les actifs risqués.",date:"17 fév. 2026",url:"#"},
+    {type:"analyse",title:"Le carry trade yen : la bombe à retardement des marchés",excerpt:"Des milliers de milliards empruntés en yen pour être investis ailleurs. Quand ce trade se dénoue, tout le monde le ressent. Août 2024 en était un avant-goût.",date:"28 jan. 2026",url:"#"}
+  ]},
+
+  "Iran":{region:"Moyen-Orient",tags:["Sanctions","Nucléaire","Axe alternatif"],lat:32,lon:53,articles:[
+    {type:"analyse",title:"L'Iran dans l'axe Moscou-Pékin : une alliance de nécessité",excerpt:"Les sanctions ont poussé Téhéran vers un axe alternatif structurel. Drones pour la Russie, hydrocarbures vers la Chine — l'Iran est devenu une pièce centrale du nouvel ordre multipolaire.",date:"7 fév. 2026",url:"#"}
+  ]},
+
+  "Singapore":{region:"Asie du Sud-Est",tags:["Hub","Finance","Agilité"],lat:1.3,lon:103.8,articles:[
+    {type:"analyse",title:"Singapour : la cité-État qui a tout compris",excerpt:"5 millions d'habitants, zéro ressource naturelle, PIB par habitant parmi les plus élevés du monde. Dans un monde fragmenté, sa position de hub neutre entre les blocs devient encore plus précieuse.",date:"20 fév. 2026",url:"lire",content:`<h3>Le miracle singapourien</h3><p>En 1965, Singapour est expulsé de la Malaisie — un micro-territoire sans ressources, sans eau douce, sans hinterland. Lee Kuan Yew transforme cette contrainte en stratégie : tout miser sur les institutions, les hommes et la position géographique. Soixante ans plus tard, le PIB par habitant de Singapour dépasse celui des États-Unis.</p><h3>Les piliers du modèle</h3><p><strong>L'État développemental compétent</strong> : gouvernement stable, peu corrompu, capable de planification long terme. <strong>L'ouverture radicale</strong> : commerce libre, flux de capitaux libres, accueil des talents mondiaux. <strong>La spécialisation dans les noeuds</strong> : port, finance, chimie, biopharma, tech — Singapour connecte et transforme. <strong>L'éducation comme priorité absolue</strong> : système constamment classé parmi les premiers mondiaux.</p><div class='conviction'>Singapour démontre que les facteurs culturels ou géographiques n'expliquent pas le développement — ce sont les institutions et les politiques qui font la différence.</div><h3>Hub de la fragmentation</h3><p>Dans un monde fragmenté, Singapour est le grand gagnant de la bifurcation. Sa neutralité géopolitique lui permet d'être simultanément hub financier pour les capitaux fuyant Hong Kong, partenaire commercial privilégié de la Chine, et base opérationnelle pour les multinationales américaines en Asie.</p><h3>L'exode de Hong Kong</h3><p>Depuis la loi sur la sécurité nationale de 2020, Singapour a absorbé un flux significatif de capitaux, de family offices, de sièges régionaux et de talents financiers. Le nombre de family offices enregistrés a quadruplé entre 2020 et 2024. Cette dynamique renforce sa position de premier hub financier asiatique.</p>"},
+    {type:"macro",title:"Singapour hub financier : résilient face à la pression de Hong Kong",excerpt:"Migration de capitaux et de talent depuis Hong Kong accélérée après 2020. La neutralité comme avantage compétitif structurel.`,date:"8 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Singapour, Suisse, Émirats — le modèle des petits États agiles",excerpt:"Trois territoires sans ressources qui surperforment structurellement. Institutions fortes, neutralité, spécialisation dans la valeur maximale.",date:"25 jan. 2026",url:"#"}
+  ]},
+
+  "Vietnam":{region:"Asie du Sud-Est",tags:["Industrie","Frontière","Non-aligné"],lat:16,lon:106,articles:[
+    {type:"analyse",title:"Vietnam : le grand gagnant du découplage US-Chine",excerpt:"Principale destination de la relocalisation industrielle fuyant la Chine. Samsung, Intel, Nike y ont massivement investi. Coûts compétitifs, stabilité politique, intégration dans les supply chains mondiales.",date:"22 fév. 2026",url:"lire",content:`<h3>Le repositionnement industriel mondial</h3><p>Le découplage US-Chine crée un mouvement massif de relocalisation industrielle. Les entreprises qui veulent diversifier leurs supply chains hors de Chine cherchent des alternatives combinant coûts compétitifs, main-d'oeuvre qualifiée et stabilité politique. Le Vietnam coche toutes ces cases mieux que la plupart de ses concurrents.</p><h3>Un succès industriel documenté</h3><p>Samsung produit au Vietnam 50% de ses smartphones mondiaux. Intel y a son plus grand site d'assemblage de puces. Apple (via ses sous-traitants), Nike, Adidas y ont massivement investi. Les exportations vietnamiennes ont été multipliées par 10 en 15 ans, passant de 60 à 370 milliards USD. C'est l'une des success stories industrielles les plus remarquables d'Asie depuis le décollage coréen des années 80.</p><div class='conviction'>Le Vietnam est notre conviction forte en Asie du Sud-Est pour la prochaine décennie. Le pays combine les avantages de la Chine des années 2000 avec le bénéfice du découplage géopolitique actuel.</div><h3>Non-alignement pragmatique</h3><p>Le Vietnam partage 1 300 km de frontière terrestre avec la Chine — son plus grand partenaire commercial et son rival historique. Cette tension permanente a forgé une diplomatie sophistiquée : Hanoi maintient des relations normales avec Washington et Pékin simultanément, rejoignant les accords de libre-échange américains et européens tout en restant dans l'orbite économique chinoise.</p><h3>Limites et risques</h3><p>L'État communiste reste autoritaire avec une faible protection des droits de propriété intellectuelle. La corruption est endémique. La montée en gamme vers des industries plus sophistiquées reste un défi. Et une dépendance trop forte aux IDE étrangers crée une vulnérabilité aux cycles d'investissement mondiaux.</p>"},
+    {type:"macro",title:"Vietnam et Chine : voisins indispensables, rivaux historiques",excerpt:"Hanoi bénéficie du découplage US-Chine tout en maintenant des liens étroits avec Pékin. Non-alignement pragmatique hérité de décennies de résistance.`,date:"10 fév. 2026",url:"#"},
+    {type:"note",title:"Asie du Sud-Est : le nouveau centre du monde",excerpt:"700 millions d'habitants, routes maritimes stratégiques. Entre Chine et Inde, les pays de l'ASEAN refusent de choisir leur camp — et en tirent un avantage structurel.",date:"15 jan. 2026",url:"#"}
+  ]},
+
+  "Indonesia":{region:"Asie du Sud-Est",tags:["Puissance émergente","Ressources","Archipel"],lat:-5,lon:118,articles:[
+    {type:"analyse",title:"Indonésie : la puissance émergente la plus sous-estimée du monde",excerpt:"270 millions d'habitants, 4ème démographie mondiale, 40% des réserves mondiales de nickel, carrefour des routes maritimes. Tous les attributs d'une grande puissance — encore sous-exploités.",date:"18 fév. 2026",url:"lire",content:`<h3>Le géant qui s'éveille</h3><p>L'Indonésie est structurellement sous-représentée dans les analyses géopolitiques et financières. Pourtant les chiffres parlent : 4ème pays le plus peuplé du monde (278M), 16ème économie mondiale, position géographique aux carrefours des détroits de Malacca et de la Sonde par lesquels transitent 40% du commerce mondial.</p><h3>Le nickel : un levier stratégique majeur</h3><p>L'Indonésie contrôle environ 40% des réserves mondiales de nickel — indispensable aux batteries de véhicules électriques. Jakarta a joué cette carte avec sophistication : interdiction d'export du minerai brut en 2020, forçant les investisseurs étrangers à construire des usines localement. Cette stratégie a attiré plus de 20 milliards USD d'investissements dans la filière. C'est le modèle de l'État développemental appliqué aux ressources critiques du XXIe siècle.</p><div class='conviction'>L'Indonésie est un actif long terme majeur pour les investisseurs exposés à la transition énergétique et aux ressources critiques. La montée en puissance est lente mais structurelle.</div><h3>Les défis de la conversion en puissance</h3><p>Malgré ces atouts, l'Indonésie peine à convertir sa masse en influence. L'archipel de 17 000 îles complique l'intégration économique nationale. La bureaucratie reste lourde, la corruption endémique, les infrastructures insuffisantes hors de Java.</p><h3>Non-alignement de principe</h3><p>Jakarta pratique un non-alignement de principe hérité de la conférence de Bandung (1955) dont elle fut l'initiatrice. Dans le contexte actuel, cette posture lui permet de maintenir des relations équilibrées avec Washington et Pékin tout en jouant un rôle de médiateur au sein de l'ASEAN.</p>"},
+    {type:"macro",title:"Le nickel indonésien et la géopolitique de la transition énergétique",excerpt:"40% des réserves mondiales de nickel. Jakarta interdit l'export brut pour forcer la transformation locale — stratégie de montée en valeur qui fonctionne.`,date:"5 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : L'ASEAN peut-elle peser face aux grandes puissances ?",excerpt:"Le consensus ASEAN rend l'organisation lente. Mais sa neutralité collective lui confère une légitimité unique comme espace de dialogue entre blocs rivaux.",date:"20 jan. 2026",url:"#"}
+  ]},
+
+  "Thailand":{region:"Asie du Sud-Est",tags:["Hub régional","Tourisme","Pivot"],lat:15,lon:101,articles:[
+    {type:"analyse",title:"Thaïlande : hub régional entre instabilité politique et résilience économique",excerpt:"Coups d'État répétés mais économie stable et ouverte. Hub logistique, touristique et industriel incontournable en Asie du Sud-Est. La transition politique reste le risque structurel.",date:"15 fév. 2026",url:"#"},
+    {type:"macro",title:"Tourisme et dépendance : le modèle thaïlandais à l'épreuve",excerpt:"12-15% du PIB dépend du tourisme. La diversification vers l'électronique et l'automobile progresse mais reste insuffisante face aux concurrents régionaux.",date:"3 fév. 2026",url:"#"}
+  ]},
+
+  "Taiwan":{region:"Asie-Pacifique",tags:["Semi-conducteurs","Géopolitique","Chine"],lat:23.5,lon:121,articles:[
+    {type:"analyse",title:"Taiwan : l'île la plus dangereuse et la plus indispensable du monde",excerpt:"TSMC fabrique 90%+ des puces avancées mondiales. Le bouclier de silicium protège Taiwan — mais s'érode à mesure que la Chine réduit sa dépendance technologique.",date:"25 fév. 2026",url:"lire",content:`<h3>Le bouclier de silicium</h3><p>TSMC produit plus de 90% des semi-conducteurs les plus avancés du monde (5nm et en dessous). Cette concentration crée une situation géopolitique sans précédent : la destruction de TSMC dans un conflit déstabiliserait immédiatement l'économie mondiale entière — y compris celle de la Chine, qui dépend des puces taïwanaises pour son industrie électronique.</p><p>C'est le silicon shield : l'idée que la valeur économique de Taiwan vivant est tellement supérieure à sa valeur conquise que l'invasion ne peut pas être rationnelle.</p><h3>Les limites du bouclier</h3><p>Mais ce raisonnement a des limites que Pékin identifie et travaille à surmonter. Premièrement, <strong>la Chine investit massivement pour réduire sa dépendance</strong> aux puces taïwanaises via le Big Fund. Deuxièmement, <strong>le bouclier ne protège pas d'un blocus</strong> — une option moins coûteuse qu'une invasion. Troisièmement, dans un régime plus idéologique, le calcul rationnel peut céder.</p><div class='warning'>Le calendrier critique : si la Chine atteint une autonomie suffisante en puces matures vers 2030-2035, le coût d'une action militaire diminue. La fenêtre de risque s'ouvre progressivement.</div><h3>Cartographie des dépendances mondiales</h3><p>La chaîne de valeur des semi-conducteurs est la plus concentrée géographiquement de l'économie mondiale. Les designs viennent des États-Unis (Nvidia, AMD, Apple). Les équipements de lithographie d'ASML (Pays-Bas). Les matériaux spéciaux du Japon. La fabrication de TSMC à Taiwan. L'assemblage en Malaisie, Vietnam, Chine. Chaque maillon est un point de fragilité géopolitique potentielle.</p><h3>Implications portefeuille</h3><p>Le risque Taiwan est le risque géopolitique le plus systémique à surveiller. Pas imminent mais croissant sur un horizon 5-10 ans. Prime de risque sur les entreprises très dépendantes de la production taïwanaise, diversification vers les fournisseurs alternatifs (ASML, matériaux japonais, assemblage Malaisie/Vietnam).</p>"},
+    {type:"macro",title:"Le bouclier de silicium : jusqu'où protège-t-il Taiwan ?",excerpt:"La thèse du silicon shield s'érode à mesure que la Chine développe sa propre capacité en puces. Le calendrier de ce rééquilibrage est la variable clé.`,date:"12 fév. 2026",url:"#"},
+    {type:"thread",title:"Thread : Semi-conducteurs — cartographie d'une dépendance mondiale",excerpt:"TSMC à Taiwan, ASML aux Pays-Bas, matériaux au Japon, designs aux États-Unis. Chaque maillon est un point de fragilité géopolitique.",date:"28 jan. 2026",url:"#"}
+  ]},
+
+  "Hong Kong":{region:"Asie-Pacifique",tags:["Finance","Chine","Déclin"],lat:22.3,lon:114.2,articles:[
+    {type:"analyse",title:"Hong Kong post-2020 : hub financier sous tutelle",excerpt:"La loi sur la sécurité nationale a mis fin au principe 'un pays deux systèmes' dans les faits. L'exode vers Singapour s'accélère. Le déclin est engagé — la question est son rythme.",date:"20 fév. 2026",url:"lire",content:`<h3>La rupture de 2020</h3><p>La loi sur la sécurité nationale imposée par Pékin en juin 2020 a constitué une rupture historique. Elle a mis fin au principe 'un pays, deux systèmes' dans les faits. L'arrestation de militants pro-démocratie, la dissolution du mouvement civil, la modification du système électoral — ces développements ont envoyé un signal clair : Hong Kong n'est plus un espace autonome fiable.</p><h3>L'exode vers Singapour</h3><p>La réponse a été rapide. Entre 2020 et 2024, Singapour a absorbé un flux significatif de capitaux, de family offices, de sièges régionaux et de talents financiers. Le nombre de family offices enregistrés à Singapour a quadruplé. Des banques privées ont déplacé leurs équipes. Les expatriés occidentaux ont majoritairement quitté.</p><div class='warning'>Pour les investisseurs, Hong Kong n'est plus un hub neutre — c'est un hub sous contrôle chinois. Un profil de risque fondamentalement différent.</div><h3>Ce qui reste</h3><p>Hong Kong conserve des atouts réels que Singapour ne peut pas facilement répliquer : accès direct aux marchés financiers chinois (Stock Connect, Bond Connect), liquidité en RMB offshore, proximité avec les entreprises chinoises. Pour les investisseurs qui veulent s'exposer à la Chine, Hong Kong reste incontournable.</p><h3>La trajectoire à 10 ans</h3><p>Le scénario central est une spécialisation progressive en hub d'accès aux marchés chinois, perdant sa fonction de hub neutre international au profit de Singapour. Ce n'est pas un effondrement — les volumes financiers restent massifs — mais une transformation du rôle.</p>"},
+    {type:"macro",title:"Hong Kong vs Singapour : le grand rééquilibrage asiatique",excerpt:"La trajectoire post-2020 a tranché en faveur de Singapour sur l'indépendance institutionnelle. Hong Kong conserve son rôle d'accès aux marchés chinois — dans un périmètre plus étroit.`,date:"8 fév. 2026",url:"#"}
+  ]}
+
+};
+
+
+// Zones ressources : {id, label, type, couleur, polygone approx [lon,lat], articles}
+const RESOURCE_ZONES = [
+  {
+    id:"terres-rares",
+    label:"Terres rares & semi-conducteurs",
+    type:"ressource",
+    color:"rgba(160,100,220,0.13)",
+    stroke:"rgba(160,100,220,0.35)",
+    // Chine du nord + Mongolie intérieure
+    features:[
+      {type:"Feature",geometry:{type:"Polygon",coordinates:[[[95,25],[135,25],[135,50],[95,50],[95,25]]]}},
+      // Australie ouest
+      {type:"Feature",geometry:{type:"Polygon",coordinates:[[[113,-35],[130,-35],[130,-20],[113,-20],[113,-35]]]}},
+      // Congo (cobalt)
+      {type:"Feature",geometry:{type:"Polygon",coordinates:[[[22,-12],[32,-12],[32,-4],[22,-4],[22,-12]]]}}
+    ],
+    articles:[
+      {type:"analyse",title:"Terres rares : la Chine contrôle 60% de la production mondiale",excerpt:"Pékin dispose d'un levier géopolitique majeur sur la chaîne d'approvisionnement technologique.",date:"20 fév. 2025",url:"#"},
+      {type:"macro",title:"La guerre des semi-conducteurs : au-delà de TSMC",excerpt:"L'enjeu dépasse Taiwan — c'est toute la chaîne de valeur des puces qui se re-territorialise.",date:"8 fév. 2025",url:"#"},
+      {type:"note",title:"IRA et CHIPS Act : l'Amérique réindustrialise à marche forcée",excerpt:"Washington subventionne massivement pour rapatrier la production de semi-conducteurs.",date:"12 jan. 2025",url:"#"}
+    ]
+  },
+  {
+    id:"hydrocarbures",
+    label:"Hydrocarbures",
+    type:"ressource",
+    color:"rgba(180,120,60,0.12)",
+    stroke:"rgba(200,140,60,0.32)",
+    features:[
+      // Golfe Persique
+      {type:"Feature",geometry:{type:"Polygon",coordinates:[[[45,20],[60,20],[60,30],[45,30],[45,20]]]}},
+      // Russie occidentale / Sibérie ouest
+      {type:"Feature",geometry:{type:"Polygon",coordinates:[[[55,55],[80,55],[80,70],[55,70],[55,55]]]}},
+      // Venezuela + golfe du Mexique
+      {type:"Feature",geometry:{type:"Polygon",coordinates:[[[-75,5],[-55,5],[-55,15],[-75,15],[-75,5]]]}},
+      // Nigeria / Golfe de Guinée
+      {type:"Feature",geometry:{type:"Polygon",coordinates:[[[3,3],[12,3],[12,10],[3,10],[3,3]]]}}
+    ],
+    articles:[
+      {type:"macro",title:"Corridors énergétiques fragmentés : la nouvelle géographie du pétrole",excerpt:"Après les sanctions, les flux pétroliers se réorganisent autour de nouveaux hubs.",date:"25 fév. 2025",url:"#"},
+      {type:"analyse",title:"Le GNL américain comme arme géopolitique",excerpt:"Washington utilise ses exportations de gaz pour réduire la dépendance européenne au gaz russe.",date:"10 fév. 2025",url:"#"},
+      {type:"thread",title:"Thread : OPEP+ en tension — qui contrôle vraiment le prix du baril ?",excerpt:"Entre ambitions saoudiennes, besoins russes et dissidences internes, le cartel montre ses failles.",date:"5 jan. 2025",url:"#"}
+    ]
+  }
+];
+
+const N2N={4:"Afghanistan",8:"Albania",12:"Algeria",24:"Angola",32:"Argentina",36:"Australia",40:"Austria",50:"Bangladesh",56:"Belgium",64:"Bhutan",68:"Bolivia",76:"Brazil",100:"Bulgaria",104:"Myanmar",116:"Cambodia",120:"Cameroon",124:"Canada",152:"Chile",156:"China",158:"Taiwan",170:"Colombia",178:"Republic of Congo",180:"Dem. Rep. Congo",188:"Costa Rica",192:"Cuba",203:"Czech Republic",208:"Denmark",214:"Dominican Republic",218:"Ecuador",818:"Egypt",222:"El Salvador",231:"Ethiopia",246:"Finland",250:"France",266:"Gabon",276:"Germany",288:"Ghana",300:"Greece",320:"Guatemala",332:"Haiti",340:"Honduras",344:"Hong Kong",356:"India",360:"Indonesia",364:"Iran",368:"Iraq",372:"Ireland",376:"Israel",380:"Italy",392:"Japan",400:"Jordan",398:"Kazakhstan",404:"Kenya",410:"South Korea",408:"North Korea",414:"Kuwait",418:"Laos",422:"Lebanon",434:"Libya",484:"Mexico",504:"Morocco",508:"Mozambique",516:"Namibia",528:"Netherlands",554:"New Zealand",566:"Nigeria",578:"Norway",586:"Pakistan",604:"Peru",608:"Philippines",616:"Poland",620:"Portugal",642:"Romania",643:"Russia",682:"Saudi Arabia",686:"Senegal",702:"Singapore",710:"South Africa",724:"Spain",729:"Sudan",728:"South Sudan",752:"Sweden",756:"Switzerland",760:"Syria",764:"Thailand",792:"Turkey",800:"Uganda",804:"Ukraine",784:"United Arab Emirates",826:"United Kingdom",840:"United States of America",858:"Uruguay",860:"Uzbekistan",862:"Venezuela",704:"Vietnam",887:"Yemen",894:"Zambia",716:"Zimbabwe"};
+
+const mapWrap = document.getElementById('map-wrap');
+const svg = d3.select('#map-svg');
+const tip = document.getElementById('tip');
+let W = mapWrap.clientWidth, H = mapWrap.clientHeight;
+svg.attr('width', W).attr('height', H);
+
+const projection = d3.geoNaturalEarth1().scale(W/6.5).translate([W/2, H/2]);
+const pathGen = d3.geoPath().projection(projection);
+const graticule = d3.geoGraticule().step([20,20]);
+
+const mapG = svg.append('g');
+mapG.append('path').datum({type:'Sphere'}).attr('class','sphere').attr('d',pathGen);
+mapG.append('path').datum(graticule()).attr('class','graticule').attr('d',pathGen);
+const countryG = mapG.append('g');
+const dotsG = mapG.append('g');
+
+const zoom = d3.zoom().scaleExtent([1,10]).on('zoom', function(e){
+  mapG.attr('transform', e.transform);
+  const k = e.transform.k;
+  dotsG.selectAll('circle.di').attr('r', 3.5/Math.sqrt(k));
+  dotsG.selectAll('circle.do').attr('r', 7/Math.sqrt(k)).style('stroke-width', 1/k);
+  countryG.selectAll('.country').style('stroke-width', 0.3/k);
+});
+svg.call(zoom);
+document.getElementById('zin').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.5);
+document.getElementById('zout').onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 0.67);
+
+// Un seul fetch, vers unpkg directement
+fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
+  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(world => {
+    const countries = topojson.feature(world, world.objects.countries);
+    const borders = topojson.mesh(world, world.objects.countries, (a,b) => a!==b);
+
+    countryG.selectAll('path').data(countries.features).join('path')
+      .attr('class', d => 'country'+(N2N[+d.id]&&DATA[N2N[+d.id]]?' has-data':''))
+      .attr('d', pathGen)
+      .on('mousemove', function(e,d){ const n=N2N[+d.id]; if(n) showTip(e.clientX,e.clientY,n); })
+      .on('mouseleave', hideTip)
+      .on('click', function(e,d){ const n=N2N[+d.id]; if(n){selectCountry(n,d3.select(this));e.stopPropagation();} });
+
+    mapG.append('path').datum(borders).attr('class','border').attr('d',pathGen);
+
+    Object.entries(DATA).forEach(([name,d]) => {
+      const pos = projection([d.lon,d.lat]); if(!pos) return;
+      const g = dotsG.append('g').attr('class','dot-g').attr('transform',`translate(${pos[0]},${pos[1]})`);
+      g.append('circle').attr('class','do').attr('r',7).attr('fill','none').attr('stroke','rgba(92,191,176,.5)').attr('stroke-width',1);
+      g.append('circle').attr('class','di').attr('r',3.5).attr('fill','#5cbfb0');
+      g.on('mousemove', function(e){ showTip(e.clientX,e.clientY,name); e.stopPropagation(); })
+       .on('mouseleave', hideTip)
+       .on('click', function(e){ selectCountry(name,null); e.stopPropagation(); });
+    });
+
+    // Pays pivots — légère teinte dorée sur les pays "Puissance moyenne"
+    const PIVOTS = ["Turkey","India","Saudi Arabia"];
+    countryG.selectAll('path').each(function(d){
+      const name = N2N[+d.id];
+      if(PIVOTS.includes(name)) d3.select(this).classed('pivot-country', true);
+    });
+
+    // Zones ressources
+    const zonesG = mapG.insert('g', ':first-child').attr('id','zones-g');
+
+    // Defs pour hachures
+    const defs = svg.select('defs').empty() ? svg.append('defs') : svg.select('defs');
+    const hatch = defs.append('pattern').attr('id','hatch-res').attr('patternUnits','userSpaceOnUse').attr('width',6).attr('height',6).attr('patternTransform','rotate(45)');
+    hatch.append('line').attr('x1',0).attr('y1',0).attr('x2',0).attr('y2',6).attr('stroke','rgba(200,140,60,0.18)').attr('stroke-width',1.5);
+
+    const hatch2 = defs.append('pattern').attr('id','hatch-rare').attr('patternUnits','userSpaceOnUse').attr('width',6).attr('height',6).attr('patternTransform','rotate(45)');
+    hatch2.append('line').attr('x1',0).attr('y1',0).attr('x2',0).attr('y2',6).attr('stroke','rgba(160,100,220,0.2)').attr('stroke-width',1.5);
+
+    RESOURCE_ZONES.forEach(zone => {
+      const hatchId = zone.id === 'terres-rares' ? 'hatch-rare' : 'hatch-res';
+      zone.features.forEach(feat => {
+        zonesG.append('path')
+          .datum(feat)
+          .attr('class','rzone')
+          .attr('d', pathGen)
+          .attr('fill', `url(#${hatchId})`)
+          .attr('stroke', zone.stroke)
+          .attr('stroke-width', 0.6)
+          .attr('opacity', 0.85)
+          .on('mousemove', function(e){ showTipZone(e.clientX, e.clientY, zone.label); e.stopPropagation(); })
+          .on('mouseleave', hideTip)
+          .on('click', function(e){ selectZone(zone); e.stopPropagation(); });
+      });
+    });
+
+    hideLoading();
+  })
+  .catch(() => hideLoading());
+
+svg.on('click', closePanel);
+
+function hideLoading(){
+  const ld = document.getElementById('loading');
+  ld.style.opacity='0';
+  setTimeout(()=>ld.style.display='none', 700);
+}
+
+function showTipZone(mx,my,label){
+  tip.style.opacity='1'; tip.style.left=(mx+14)+'px'; tip.style.top=(my-10)+'px';
+  tip.innerHTML=`<strong style="color:#c87840">${label}</strong>`;
+}
+function selectZone(zone){
+  countryG.selectAll('.country').classed('active',false);
+  curD = {region:"Ressources critiques", tags:[zone.type], articles: zone.articles};
+  document.getElementById('pn').textContent = zone.label;
+  document.getElementById('pr').textContent = "Ressources critiques";
+  document.getElementById('pcount').textContent = `${zone.articles.length} analyses`;
+  document.getElementById('ptags').innerHTML = `<span class="tag" style="border-color:rgba(200,140,60,.4);color:#c87840">${zone.id==='terres-rares'?'Terres rares':'Hydrocarbures'}</span>`;
+  renderList();
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('hint').style.opacity='0';
+}
+function showTip(mx,my,name){
+  const d=DATA[name];
+  tip.style.opacity='1'; tip.style.left=(mx+14)+'px'; tip.style.top=(my-10)+'px';
+  tip.innerHTML=`<strong style="color:${d?'#5cbfb0':'#8fa0b0'}">${name}</strong>${d?` <span style="color:#4a5a6a;font-size:11px"> — ${d.articles.length} analyse${d.articles.length>1?'s':''}</span>`:''}`;
+}
+function hideTip(){ tip.style.opacity='0'; }
+
+let curF='all', curD=null;
+function selectCountry(name, pathEl){
+  countryG.selectAll('.country').classed('active',false);
+  if(pathEl) pathEl.classed('active',true);
+  else countryG.selectAll('.country').filter(d=>N2N[+d.id]===name).classed('active',true);
+  curD = DATA[name]||null;
+  document.getElementById('pn').textContent = name;
+  document.getElementById('pr').textContent = curD?curD.region:'—';
+  document.getElementById('pcount').textContent = curD?`${curD.articles.length} analyse${curD.articles.length>1?'s':''}`:'';
+  document.getElementById('ptags').innerHTML = curD?curD.tags.map(t=>`<span class="tag">${t}</span>`).join(''):'';
+  renderList();
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('hint').style.opacity='0';
+}
+function closePanel(){
+  const p = document.getElementById('panel');
+  p.classList.remove('open');
+  p.classList.remove('article-open');
+  countryG.selectAll('.country').classed('active',false);
+  document.getElementById('hint').style.opacity='1';
+}
+function renderList(){
+  const el=document.getElementById('pl');
+  if(!curD){el.innerHTML='<div class="pe"><p>Aucune analyse disponible pour cette zone.</p></div>';return;}
+  const items=curF==='all'?curD.articles:curD.articles.filter(a=>a.type===curF);
+  if(!items.length){el.innerHTML='<div class="pe"><p>Aucune analyse de ce type.</p></div>';return;}
+  window._curArticles = items;
+  el.innerHTML=items.map((a,i)=>`<div class="ai">
+    <div class="at ${a.type}">${a.type.toUpperCase()}</div>
+    <div class="ati">${a.title}</div>
+    <div class="ae">${a.excerpt}</div>
+    <div class="af">
+      <span class="ad">${a.date}</span>
+      ${a.content ? `<a href="#" class="al" onclick="openArticle(event,${i})">Lire →</a>` : ''}
+    </div>
+  </div>`).join('');
+}
+
+document.getElementById('art-back').addEventListener('click', function(){
+  document.getElementById('panel').classList.remove('article-open');
+});
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); curF=b.dataset.f; renderList();
+  });
+});
+document.getElementById('pcl').addEventListener('click', closePanel);
+
+window.addEventListener('resize',()=>{
+  W=mapWrap.clientWidth; H=mapWrap.clientHeight;
+  svg.attr('width',W).attr('height',H);
+  projection.scale(W/6.5).translate([W/2,H/2]);
+  mapG.selectAll('path').attr('d',pathGen);
+  Object.entries(DATA).forEach(([name,d])=>{
+    const pos=projection([d.lon,d.lat]); if(!pos) return;
+    dotsG.selectAll('.dot-g').filter(function(){ return d3.select(this).attr('data-name')===name; }).attr('transform',`translate(${pos[0]},${pos[1]})`);
+  });
+});
+
+}; // fin window.onload
+
+function openArticle(e, i){
+  e.preventDefault();
+  const a = window._curArticles[i];
+  if(!a || !a.content) return;
+  const av = document.getElementById('article-view');
+  av.querySelector('.art-body').innerHTML =
+    '<div class="art-type ' + a.type + '">' + a.type.toUpperCase() + '</div>'
+    + '<div class="art-title">' + a.title + '</div>'
+    + '<div class="art-meta">' + a.date + '</div>'
+    + '<div class="art-lead">' + a.excerpt + '</div>'
+    + '<div class="art-content">' + a.content + '</div>';
+  av.scrollTop = 0;
+  const panel = document.getElementById('panel');
+  panel.classList.add('open');
+  panel.classList.add('article-open');
+}
+
+// ══════════════════════════════════════════════════════
+// ADMIN — tout en scope global
+// ══════════════════════════════════════════════════════
+var admSelCountry = null;
+var admEditIdx = null;
+var admUnlocked = false;
+var admSeq = '';
+
+document.addEventListener('keydown', function(e){
+  admSeq = (admSeq + e.key).slice(-5);
+  if(admSeq === 'holon'){
+    admUnlocked = true;
+    admSeq = '';
+    document.getElementById('adm-export-btn').style.display = '';
+    document.getElementById('adm-export-note').textContent = 'Modifications actives immédiatement. Exportez pour sauvegarder.';
+    admRenderRight();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('logo-wrap').addEventListener('dblclick', function(){
+    var o = document.getElementById('admin-overlay');
+    o.classList.toggle('open');
+    if(o.classList.contains('open')) admRenderCountryList();
+  });
+  document.getElementById('adm-close').addEventListener('click', function(){
+    document.getElementById('admin-overlay').classList.remove('open');
+  });
+  document.getElementById('adm-export-btn').addEventListener('click', function(){
+    var json = JSON.stringify(DATA, null, 2);
+    var blob = new Blob(['const DATA = ' + json + ';'], {type:'text/javascript'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'data.js';
+    a.click();
+  });
+
+});
+
+function admRenderCountryList(){
+  var el = document.getElementById('adm-country-list');
+  el.innerHTML = Object.keys(DATA).sort().map(function(name){
+    return '<div class="adm-country-item' + (name===admSelCountry?' sel':'') + '" data-name="' + name + '">' + name + '</div>';
+  }).join('');
+  el.querySelectorAll('.adm-country-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      admSelCountry = item.dataset.name;
+      admEditIdx = null;
+      admRenderCountryList();
+      admRenderRight();
+    });
+  });
+}
+
+function admRenderRight(){
+  var el = document.getElementById('adm-right');
+  if(!el) return;
+  if(!admSelCountry){
+    el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--muted);font-size:14px;">Sélectionnez un pays</div>';
+    return;
+  }
+  var d = DATA[admSelCountry];
+  var articles = d ? d.articles : [];
+  var html = '<div class="adm-section-title">' + admSelCountry.toUpperCase() + ' — ' + articles.length + ' article' + (articles.length>1?'s':'') + '</div>';
+
+  articles.forEach(function(a, i){
+    html += '<div class="adm-article">'
+      + '<div class="adm-article-title">' + a.title + '</div>'
+      + '<div class="adm-article-meta">' + a.type.toUpperCase() + ' · ' + a.date + '</div>'
+      + (admUnlocked ? '<div class="adm-article-actions">'
+          + '<button class="adm-btn-sm" onclick="admEditArticle(' + i + ')">Modifier</button>'
+          + '<button class="adm-btn-sm del" onclick="admDeleteArticle(' + i + ')">Supprimer</button>'
+          + '</div>' : '')
+      + '</div>';
+  });
+
+  if(admUnlocked){
+    html += '<button class="adm-add-btn" onclick="admNewArticle()">+ Nouvel article</button>';
+  }
+
+  if(admEditIdx !== null){
+    var a = admEditIdx === 'new' ? {type:'analyse',title:'',excerpt:'',date:'',url:'#'} : articles[admEditIdx];
+    if(a){
+      html += '<div class="adm-form" id="adm-form">'
+        + '<label>TYPE</label>'
+        + '<select id="af-type">'
+        + '<option value="analyse"' + (a.type==='analyse'?' selected':'') + '>Analyse</option>'
+        + '<option value="macro"' + (a.type==='macro'?' selected':'') + '>Macro</option>'
+        + '<option value="thread"' + (a.type==='thread'?' selected':'') + '>Thread</option>'
+        + '<option value="note"' + (a.type==='note'?' selected':'') + '>Note</option>'
+        + '</select>'
+        + '<label>TITRE</label>'
+        + '<input id="af-title" type="text" value="' + (a.title||'').replace(/"/g,'&quot;') + '">'
+        + '<label>EXTRAIT</label>'
+        + '<textarea id="af-excerpt">' + (a.excerpt||'') + '</textarea>'
+        + '<label>DATE</label>'
+        + '<input id="af-date" type="text" value="' + (a.date||'') + '">'
+        + '<label>URL</label>'
+        + '<input id="af-url" type="text" value="' + (a.url||'#') + '">'
+        + '<div class="adm-form-actions">'
+        + '<button class="adm-btn cancel" onclick="admCancelEdit()">Annuler</button>'
+        + '<button class="adm-btn" onclick="admSaveArticle()">Enregistrer</button>'
+        + '</div></div>';
+    }
+  }
+
+  el.innerHTML = html;
+  if(admEditIdx !== null) setTimeout(function(){ var f=document.getElementById('adm-form'); if(f) f.scrollIntoView({behavior:'smooth'}); }, 50);
+}
+
+function admEditArticle(i){ admEditIdx=i; admRenderRight(); }
+function admNewArticle(){ admEditIdx='new'; admRenderRight(); }
+function admCancelEdit(){ admEditIdx=null; admRenderRight(); }
+
+function admDeleteArticle(i){
+  if(!confirm('Supprimer cet article ?')) return;
+  DATA[admSelCountry].articles.splice(i, 1);
+  admEditIdx = null;
+  admRenderRight();
+}
+
+function admSaveArticle(){
+  var art = {
+    type: document.getElementById('af-type').value,
+    title: document.getElementById('af-title').value.trim(),
+    excerpt: document.getElementById('af-excerpt').value.trim(),
+    date: document.getElementById('af-date').value.trim(),
+    url: document.getElementById('af-url').value.trim() || '#'
+  };
+  if(!art.title){ alert('Le titre est obligatoire.'); return; }
+  if(!DATA[admSelCountry]) DATA[admSelCountry] = {region:'',tags:[],lat:0,lon:0,articles:[]};
+  if(admEditIdx === 'new'){
+    DATA[admSelCountry].articles.push(art);
+  } else {
+    DATA[admSelCountry].articles[admEditIdx] = art;
+  }
+  admEditIdx = null;
+  admRenderRight();
+}
+
+</script>
+
+<!-- ADMIN PANEL -->
+<div id="admin-overlay">
+  <div id="admin-box">
+    <div class="adm-hd">
+      <h2>ADMINISTRATION</h2>
+      <span>Double-cliquez sur le logo pour ouvrir/fermer</span>
+      <button class="adm-close" id="adm-close">✕</button>
+    </div>
+    <div class="adm-body">
+      <div class="adm-left" id="adm-country-list"></div>
+      <div class="adm-right" id="adm-right">
+        <div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--muted);font-size:14px;">Sélectionnez un pays</div>
+      </div>
+    </div>
+    <div class="adm-export">
+      <span class="adm-export-note" id="adm-export-note">Double-cliquez sur le logo pour consulter le contenu par pays.</span>
+      <button class="adm-btn" id="adm-export-btn" style="display:none">EXPORTER data.js</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
